@@ -1,5 +1,6 @@
 const glassdoor = "https://www.glassdoor.com/Job/index.htm";
 const yCombinator = "https://www.workatastartup.com/jobs/";
+const zipRecruiter = "https://www.ziprecruiter.com/jobs-search";
 const script = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
@@ -9,14 +10,10 @@ chrome.action.onClicked.addListener(async (tab) => {
         script["files"] = ["glassdoor.js"];
     } else if (tab.url.startsWith(yCombinator)) {
         script["files"] = ["yCombinator.js"];
+    } else if (tab.url.startsWith(zipRecruiter)) {
+        script["files"] = ["zipRecruiter.js"];
     }
 
     chrome.scripting.executeScript(script);
 })
-
-// todo: write the scripts and the fetch query inside the scripts once injected
-// create db in supabase
-// write the backend in go
-// host backend on railway(?)
-// figure out how to protect the api endpoint
 
