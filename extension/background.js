@@ -3,12 +3,12 @@ const yCombinator = "https://www.workatastartup.com/jobs/";
 const script = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
-    script["target"] = { tabId: tab.id }
+    script["target"] = { tabId: tab.id };
 
     if (tab.url.startsWith(glassdoor)) {
-        script["files"] = ["glassdoor.js"]
+        script["files"] = ["glassdoor.js"];
     } else if (tab.url.startsWith(yCombinator)) {
-        script["files"] = ["yCombinator.js"]
+        script["files"] = ["yCombinator.js"];
     }
 
     chrome.scripting.executeScript(script);
