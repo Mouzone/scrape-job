@@ -1,4 +1,4 @@
-const glassdoor = "https://www.glassdoor.com/Job/index.htm";
+const glassdoor = "https://www.glassdoor.com/Job/";
 const yCombinator = "https://www.workatastartup.com/jobs/";
 const zipRecruiter = "https://www.ziprecruiter.com/jobs-search";
 const script = {}
@@ -7,6 +7,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     script["target"] = { tabId: tab.id };
 
     if (tab.url.startsWith(glassdoor)) {
+        console.log("here")
         script["files"] = ["glassdoor.js"];
     } else if (tab.url.startsWith(yCombinator)) {
         script["files"] = ["yCombinator.js"];

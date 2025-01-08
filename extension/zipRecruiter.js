@@ -1,4 +1,17 @@
-const jobTitle = document.querySelector("h1")
-const companyName = document.querySelector("h1 ~ a")
+const jobTitleElement = document.querySelector("h1");
+const companyNameElement = document.querySelector("h1 ~ a");
 
-console.log(companyName.textContent, jobTitle.textContent)
+const jobTitle = jobTitleElement.textContent;
+const companyName = companyNameElement.textContent;
+fetch("http://localhost:3000/job/add",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            companyName,
+            jobTitle
+        })
+    }
+);
