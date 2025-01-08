@@ -7,7 +7,6 @@ chrome.action.onClicked.addListener(async (tab) => {
     script["target"] = { tabId: tab.id };
 
     if (tab.url.startsWith(glassdoor)) {
-        console.log("here")
         script["files"] = ["glassdoor.js"];
     } else if (tab.url.startsWith(yCombinator)) {
         script["files"] = ["yCombinator.js"];
