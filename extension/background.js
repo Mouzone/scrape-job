@@ -17,3 +17,4 @@ chrome.action.onClicked.addListener(async (tab) => {
     chrome.scripting.executeScript(script);
 })
 
+// todo: after executing, remove the script so can be run again

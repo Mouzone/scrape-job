@@ -1,7 +1,14 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
+import { cors } from '@elysiajs/cors'
 
 const app = new Elysia()
-    .post("/job", () => console.log("hi"))
+    .use(cors())
+    .post("/job/add", ({body: {companyName, jobTitle}}) => console.log({companyName, jobTitle}), {
+        body: t.Object({
+            companyName: t.String(),
+            jobTitle: t.String()
+        })
+    })
     .listen(3000);
 
 console.log(
