@@ -1,25 +1,15 @@
 import { Elysia, t } from "elysia";
-import { cors } from '@elysiajs/cors'
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient()
+import { cors } from '@elysiajs/cors';
+import { addJob } from "../prisma/job";
+import { JobSchema } from "../types";
 
 const app = new Elysia()
     .use(cors())
-    .post("/job/add", async ({body: {jobsite, company, title}}) => {
-        console.log({jobsite, company, title})
-        await prisma.job.create({
-            data: {
-                jobsite,
-                company,
-                title
-            }
-        })
+    .post("/job/add", async ({body}) => {
+        console.log(body);
+        await addJob(body)
     }, {
-        body: t.Object({
-            jobsite: t.String(),
-            company: t.String(),
-            title: t.String()
-        })
+       body: JobSchema
     })
     .listen(3000);
 
