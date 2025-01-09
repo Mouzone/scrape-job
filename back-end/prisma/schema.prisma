@@ -14,3 +14,11 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
         
+model Job {
+    id Int @id
+    jobsite String
+    applied DateTime @default(now())
+    company String
+    title String
+    link String @default("")
+}
