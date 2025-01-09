@@ -1,9 +1,9 @@
 function scrapeZipRecruiter() {
     const jobTitleElement = document.querySelector("h1");
-    const companyNameElement = document.querySelector("h1 ~ a");
+    const companyElement = document.querySelector("h1 ~ a");
     
-    const jobTitle = jobTitleElement.textContent;
-    const companyName = companyNameElement.textContent;
+    const title = jobTitleElement.textContent;
+    const company = companyElement.textContent;
     fetch("http://localhost:3000/job/add",
         {
             method: "POST",
@@ -12,8 +12,8 @@ function scrapeZipRecruiter() {
             },
             body: JSON.stringify({
                 jobsite: "ZipRecruiter",
-                companyName,
-                jobTitle
+                company,
+                title
             })
         }
     );

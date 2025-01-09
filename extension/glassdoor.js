@@ -1,9 +1,9 @@
 function scrapeGlassDoor() {
-    const companyNameElement = document.querySelector("h4.heading_Heading__BqX5J.heading_Subhead__Ip1aW");
+    const companyElement = document.querySelector("h4.heading_Heading__BqX5J.heading_Subhead__Ip1aW");
     const jobTitleElement = document.querySelector("h1.heading_Heading__BqX5J.heading_Level1__soLZs");
     
-    const companyName = companyNameElement.textContent;
-    const jobTitle = jobTitleElement.textContent;
+    const company = companyElement.textContent;
+    const title = jobTitleElement.textContent;
     
     fetch("http://localhost:3000/job/add",
         {
@@ -13,8 +13,8 @@ function scrapeGlassDoor() {
             },
             body: JSON.stringify({
                 jobsite: "Glassdoor",
-                companyName,
-                jobTitle
+                company,
+                title
             })
         }
     );
