@@ -22,5 +22,4 @@ model Job {
 
     company String
     title   String
-    link    String @default("")
 }
