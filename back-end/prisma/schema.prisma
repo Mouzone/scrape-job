@@ -17,7 +17,7 @@ datasource db {
 model Job {
     id Int @id
 
-    jobsite String
+    jobsite String @default("other")
     applied DateTime @default(now())
 
     company String
