@@ -23,3 +23,10 @@ model Job {
     company String
     title   String
 }
+
+model Account {
+    id Int @id @default(autoincrement())
+
+    username String @default("sunnyliu.jobs@gmail.com")
+    passwords String
+}
