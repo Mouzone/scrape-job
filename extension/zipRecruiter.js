@@ -11,6 +11,7 @@ function scrapeZipRecruiter() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                jobsite: "ZipRecruiter",
                 companyName,
                 jobTitle
             })

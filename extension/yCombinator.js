@@ -12,6 +12,7 @@ function scrapeYCombinator() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                jobsite: "Y Combinator",
                 companyName,
                 jobTitle
             })

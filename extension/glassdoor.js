@@ -12,6 +12,7 @@ function scrapeGlassDoor() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
+                jobsite: "Glassdoor",
                 companyName,
                 jobTitle
             })
