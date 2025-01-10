@@ -1,5 +1,6 @@
 import { useState } from "react"
 import useSWR from "swr"
+import formatDateTime from "./utility/formatDateTime"
 
 function App() {
     const [ page, setPage ] = useState("jobs")
@@ -9,9 +10,10 @@ function App() {
                 <button onClick={() => setPage("jobs")}> Jobs </button>
                 <button onClick={() => setPage("accounts")}> Accounts </button>
             </div>
-            { page === "jobs" 
-                ? <Jobs/>
-                : <Accounts/>
+            { 
+                page === "jobs" 
+                    ? <Jobs/>
+                    : <Accounts/>
             }
         </>
     )
@@ -43,7 +45,7 @@ function Jobs() {
                             return <tr>
                                 <td>{index + 1}</td>
                                 <td>{entry["jobsite"]}</td>
-                                <td>{entry["applied"]}</td>
+                                <td>{formatDateTime(entry["applied"])}</td>
                                 <td>{entry["company"]}</td>
                                 <td>{entry["title"]}</td>
                             </tr>
@@ -94,4 +96,5 @@ function SearchBar() {
         <></>
     )
 }
+
 export default App
