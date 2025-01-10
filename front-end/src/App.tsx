@@ -18,17 +18,23 @@ function App() {
 
 function Jobs() {
     return (
-        <></>
+        <>
+            <SearchBar/>
+        </>
     )
 }
 
 function Accounts() {
     return (
-        <></>
+        <>
+            <SearchBar/>
+        </>
     )
 }
 
-function searchBar() {
-    
+function SearchBar() {
+    return (
+        <></>
+    )
 }
 export default App
