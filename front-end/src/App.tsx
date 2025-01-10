@@ -1,6 +1,5 @@
 import { useState } from "react"
 import useSWR from "swr"
-import formatDateTime from "./utility/formatDateTime"
 
 function App() {
     const [ page, setPage ] = useState("jobs")
