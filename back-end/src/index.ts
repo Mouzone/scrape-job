@@ -13,10 +13,10 @@ const app = new Elysia()
        body: JobSchema
     })
     .get("/jobs", async() => {
-        await getJobs()
+       return await getJobs()
     })
     .get("/accounts", async () => {
-        await getAccounts()
+        return await getAccounts()
     })
     .listen(3000);
 
