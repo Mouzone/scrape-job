@@ -10,89 +10,42 @@ function App() {
                 <button onClick={() => setPage("jobs")}> Jobs </button>
                 <button onClick={() => setPage("accounts")}> Accounts </button>
             </div>
-            { 
-                page === "jobs" 
-                    ? <Jobs/>
-                    : <Accounts/>
-            }
+            <Table type={page}/>
         </>
     )
 }
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-function Jobs() {
-    const [ pageIndex, setPageIndex ] = useState(0)
-    const { data, error, isLoading } = useSWR("http://localhost:3000/jobs", fetcher)
-    if (error) return <div>failed to load</div>
-    if (isLoading) return <div>loading...</div>
-
-    const limit = Math.floor(data.length / 50) * 50
-    const toShow = data.slice(pageIndex, pageIndex + 50)
-    return (
-        <>
-            <SearchBar/>
-            <table>
-                <thead>
-                    <tr>
-                        <th> </th>
-                        <th> Jobsite </th>
-                        <th> Applied </th>
-                        <th> Company </th>
-                        <th> Title </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        toShow.map((entry, index) => {
-                            return <tr key={pageIndex + index}>
-                                <td>{pageIndex + index + 1}</td>
-                                <td>{entry["jobsite"]}</td>
-                                <td>{formatDateTime(entry["applied"])}</td>
-                                <td>{entry["company"]}</td>
-                                <td>{entry["title"]}</td>
-                            </tr>
-                        })
-                    }
-                </tbody>
-            </table>
-            <div>
-                <button onClick={() => setPageIndex(Math.max(0, pageIndex - 50))}> Prev </button>
-                <button onClick={() => setPageIndex(Math.min(limit, pageIndex + 50))}> Next </button>
-            </div>
-        </>
-    )
+const columns = {
+    accounts: ["company", "username", "password"],
+    jobs: ["jobsite", "applied", "company", "title"]
 }
 
-function Accounts() {
-    // const [ searchTerm, setSearchTerm ] = useState("")
+function Table({type} : {type: String}) {
     const [ pageIndex, setPageIndex ] = useState(0)
-    const { data, error, isLoading } = useSWR("http://localhost:3000/accounts", fetcher)
-
+    const { data, error, isLoading } = useSWR("http://localhost:3000/" + type, fetcher)
     if (error) return <div>failed to load</div>
     if (isLoading) return <div>loading...</div>
 
     const limit = Math.floor(data.length / 50) * 50
     const toShow = data.slice(pageIndex, pageIndex + 50)
+
     return (
         <>
             <table>
                 <thead>
                     <tr>
                         <th> </th>
-                        <th> Company </th>
-                        <th> Username </th>
-                        <th> Password </th>
+                        { columns[type].map(header => <th>{header}</th>) }
                     </tr>
                 </thead>
                 <tbody>
                     {
                         toShow.map((entry, index) => {
-                            return <tr key={pageIndex + index}>
-                                <td>{pageIndex + index + 1}</td>
-                                <td>{entry["company"]}</td>
-                                <td>{entry["username"]}</td>
-                                <td>{entry["password"]}</td>
+                            return <tr key={pageIndex + index + 1}>
+                                <td> {pageIndex + index + 1 }</td>
+                                { columns[type].map((column) => <td>{entry[column]}</td>) }
                             </tr>
                         })
                     }
