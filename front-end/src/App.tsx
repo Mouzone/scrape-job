@@ -42,9 +42,22 @@ function Jobs() {
 }
 
 function Accounts() {
+    const { data, error, isLoading } = useSWR("http://localhost:3000/accounts", fetcher)
+    if (error) return <div>failed to load</div>
+    if (isLoading) return <div>loading...</div>
+
     return (
         <>
             <SearchBar/>
+            {
+                data.map(entry => {
+                    return <tr>
+                        <td>{entry["company"]}</td>
+                        <td>{entry["username"]}</td>
+                        <td>{entry["password"]}</td>
+                    </tr>
+                })
+            }
         </>
     )
 }
