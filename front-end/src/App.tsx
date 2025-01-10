@@ -27,16 +27,30 @@ function Jobs() {
     return (
         <>
             <SearchBar/>
-            {
-                data.map(entry => {
-                    return <tr>
-                        <td>{entry["jobsite"]}</td>
-                        <td>{entry["applied"]}</td>
-                        <td>{entry["company"]}</td>
-                        <td>{entry["title"]}</td>
+            <table>
+                <thead>
+                    <tr>
+                        <th> </th>
+                        <th> Jobsite </th>
+                        <th> Applied </th>
+                        <th> Company </th>
+                        <th> Title </th>
                     </tr>
-                })
-            }
+                </thead>
+                <tbody>
+                    {
+                        data.map((entry, index) => {
+                            return <tr>
+                                <td>{index + 1}</td>
+                                <td>{entry["jobsite"]}</td>
+                                <td>{entry["applied"]}</td>
+                                <td>{entry["company"]}</td>
+                                <td>{entry["title"]}</td>
+                            </tr>
+                        })
+                    }
+                </tbody>
+            </table>
         </>
     )
 }
@@ -49,15 +63,28 @@ function Accounts() {
     return (
         <>
             <SearchBar/>
-            {
-                data.map(entry => {
-                    return <tr>
-                        <td>{entry["company"]}</td>
-                        <td>{entry["username"]}</td>
-                        <td>{entry["password"]}</td>
+            <table>
+                <thead>
+                    <tr>
+                        <th> </th>
+                        <th> Company </th>
+                        <th> Username </th>
+                        <th> Password </th>
                     </tr>
-                })
-            }
+                </thead>
+                <tbody>
+                    {
+                        data.map((entry, index) => {
+                            return <tr>
+                                <td>{index + 1}</td>
+                                <td>{entry["company"]}</td>
+                                <td>{entry["username"]}</td>
+                                <td>{entry["password"]}</td>
+                            </tr>
+                        })
+                    }
+                </tbody>
+            </table>
         </>
     )
 }
