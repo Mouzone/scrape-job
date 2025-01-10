@@ -3,6 +3,7 @@ import { cors } from '@elysiajs/cors';
 import { addJob, getJobs } from "../prisma/job";
 import { getAccounts } from "../prisma/account";
 import { JobSchema } from "../types";
+import formatDateTime from "./utility/formatDateTime";
 
 const app = new Elysia()
     .use(cors())
@@ -13,7 +14,9 @@ const app = new Elysia()
        body: JobSchema
     })
     .get("/jobs", async() => {
-       return await getJobs()
+       const results = await getJobs()
+       results.map(result => result["applied"] = formatDateTime(result["applied"]))
+       return results
     })
     .get("/accounts", async () => {
         return await getAccounts()
