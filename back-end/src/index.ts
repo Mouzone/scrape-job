@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors';
-import { addJob } from "../prisma/job";
+import { addJob, getJobs } from "../prisma/job";
+import { getAccounts } from "../prisma/account";
 import { JobSchema } from "../types";
 
 const app = new Elysia()
@@ -10,6 +11,12 @@ const app = new Elysia()
         await addJob(body)
     }, {
        body: JobSchema
+    })
+    .get("/jobs", async() => {
+        await getJobs()
+    })
+    .get("/accounts", async () => {
+        await getAccounts()
     })
     .listen(3000);
 

@@ -7,3 +7,7 @@ export function addJob(job: Job) {
         data: job
     });
 }
+
+export function getJobs() {
+    return prisma.job.findMany()
+}
