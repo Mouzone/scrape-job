@@ -29,5 +29,5 @@ model Account {
 
     company String 
     username String @default("sunnyliu.jobs@gmail.com")
-    passwords String
+    password String
 }
