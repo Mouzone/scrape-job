@@ -28,7 +28,7 @@ function Table({type} : {type: String}) {
     if (isLoading) return <div>loading...</div>
 
     const limit = Math.floor(data.length / 50) * 50
-    const toShow = data.slice(pageIndex, pageIndex + 50)
+    const paginated = data.slice(pageIndex, pageIndex + 50)
 
     return (
         <>
@@ -36,12 +36,12 @@ function Table({type} : {type: String}) {
                 <thead>
                     <tr>
                         <th> </th>
-                        { columns[type].map(header => <th>{header}</th>) }
+                        { columns[type].map(header => <th>{header.at(0).toUpperCase() + header.substring(1)}</th>) }
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        toShow.map((entry, index) => {
+                        paginated.map((entry, index) => {
                             return <tr key={pageIndex + index + 1}>
                                 <td> {pageIndex + index + 1 }</td>
                                 { columns[type].map((column) => <td>{entry[column]}</td>) }
@@ -55,12 +55,6 @@ function Table({type} : {type: String}) {
                 <button onClick={() => setPageIndex(Math.min(limit, pageIndex + 50))}> Next </button>
             </div>
         </>
-    )
-}
-
-function SearchBar() {
-    return (
-        <></>
     )
 }
 
