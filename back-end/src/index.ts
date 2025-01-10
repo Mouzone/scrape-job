@@ -15,6 +15,7 @@ const app = new Elysia()
     })
     .get("/jobs", async() => {
        const results = await getJobs()
+    //  modifies the objects inside results, so we don't have to set the output to another array
        results.map(result => result["applied"] = formatDateTime(result["applied"]))
        return results
     })
