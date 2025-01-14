@@ -146,6 +146,9 @@ function AccountInput() {
 		e.preventDefault()
 		await fetch("http://localhost:3000/accounts", {
 			method: "POST",
+			headers: {
+				'Content-Type': 'application/json' // Set the content type
+			},
 			body: JSON.stringify({company, username, password})
 		})
 	}
