@@ -55,7 +55,6 @@ export default function Table({ type }) {
 		<div className="text-center py-8 text-gray-600">Loading...</div>
 	);
 
-    console.log(type, searchTerm, searchValue)
     const filtered = searchValue === "" 
         ? data
         : data.filter(entry => entry[searchTerm].toLowerCase().includes(searchValue))
