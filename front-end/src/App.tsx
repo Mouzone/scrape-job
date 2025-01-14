@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import useSWR from "swr";
 
@@ -51,6 +51,10 @@ function Table({ type }) {
     "http://localhost:3000/" + type,
     fetcher
   );
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [type]);
 
   if (error) return (
     <div className="text-center py-8 text-red-600">Failed to load</div>
