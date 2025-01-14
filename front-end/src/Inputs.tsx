@@ -14,8 +14,8 @@ const Inputs = () => {
             onChange={(e) => setSelectedForm(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <option value="job">Job Application</option>
-            <option value="account">Account Creation</option>
+            <option value="job"> Job </option>
+            <option value="account"> Account </option>
           </select>
         </div>
   
@@ -33,6 +33,9 @@ const Inputs = () => {
   
     const onSubmit = async (e) => {
       e.preventDefault();
+      if (!jobsite || !company || !title) {
+        return
+      }
       await fetch("http://localhost:3000/jobs", {
         method: "POST",
         headers: {
@@ -40,6 +43,9 @@ const Inputs = () => {
         },
         body: JSON.stringify({ jobsite, company, title })
       });
+      setJobsite("")
+      setCompany("")
+      setTitle("")
     };
   
     return (
@@ -100,6 +106,9 @@ const Inputs = () => {
   
     const onSubmit = async (e) => {
       e.preventDefault();
+      if (!company || !username || !password) {
+        return
+      }
       await fetch("http://localhost:3000/accounts", {
         method: "POST",
         headers: {
@@ -107,6 +116,9 @@ const Inputs = () => {
         },
         body: JSON.stringify({ company, username, password })
       });
+      setCompany("")
+      setUsername("")
+      setPassword("")
     };
   
     return (
