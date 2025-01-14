@@ -9,7 +9,7 @@ function App() {
 		<div className="min-h-screen bg-gray-50 p-8">
 			<div className="mx-auto max-w-6xl bg-white rounded-lg shadow-sm">
 				<div className="p-6">
-						
+					<Inputs/>
 					<div className="mb-6 flex gap-4">
 						<button 
 							onClick={() => setPage("jobs")}
@@ -129,4 +129,37 @@ function Table({ type }) {
 	);
 }
 
+function Inputs() {
+	return (
+		<>
+			<AccountInput/>
+		</>
+	)
+}
+
+function AccountInput() {
+	const [company, setCompany] = useState("")
+	const [username, setUsername] = useState("")
+	const [password, setPassword] = useState("") 
+
+	const onSubmit = async (e) => {
+		e.preventDefault()
+		await fetch("http://localhost:3000/accounts", {
+			method: "POST",
+			body: JSON.stringify({company, username, password})
+		})
+	}
+
+	return (
+		<form onSubmit={onSubmit}>
+			<label> Company </label>
+			<input type="text" value={company} name="company" onChange={(e) => setCompany(e.target.value)}/>
+			<label> Username </label>
+			<input type="text" value={username} name="username" onChange={(e) => setUsername(e.target.value)}/>
+			<label>Password</label>
+			<input type="text" value={password} name="password" onChange={(e) => setPassword(e.target.value)}/>
+			<button type="submit"> Submit </button>
+		</form>
+	)
+}
 export default App;
