@@ -7,13 +7,14 @@ import formatDateTime from "./utility/formatDateTime";
 
 const app = new Elysia()
     .use(cors())
-    .post("/job/add", async ({body}) => {
+    .post("/jobs", async ({body}) => {
         console.log(body);
         await addJob(body)
     }, {
        body: JobSchema
     })
     .post("/accounts", async (body) => {
+        console.log(body)
         await addAccount(body)
     }, {
         body: AccountSchema
