@@ -13,7 +13,7 @@ const app = new Elysia()
     }, {
        body: JobSchema
     })
-    .post("/accounts", async (body) => {
+    .post("/accounts", async ({body}) => {
         console.log(body)
         await addAccount(body)
     }, {

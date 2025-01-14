@@ -1,14 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { Account } from "../types";
 const prisma = new PrismaClient()
 
 export function getAccounts() {
     return prisma.account.findMany()
 }
 
-export function addAccount(company: String, username: String, password: String) {
+export function addAccount(account: Account) {
     return prisma.account.create({
-        company,
-        username,
-        password
+        data: account
     })
 }
