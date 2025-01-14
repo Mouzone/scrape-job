@@ -132,8 +132,38 @@ function Table({ type }) {
 function Inputs() {
 	return (
 		<>
+			<JobInput/>
 			<AccountInput/>
 		</>
+	)
+}
+
+function JobInput() {
+	const [jobsite, setJobsite] = useState("")
+	const [company, setCompany] = useState("")
+	const [title, setTitle] = useState("")
+
+	const onSubmit = async (e) => {
+		e.preventDefault()
+		await fetch("http://localhost:3000/jobs", {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json' 
+			},
+			body: JSON.stringify({jobsite, company, title})
+		})
+	}
+
+	return (
+		<form onSubmit={onSubmit}>
+			<label> Jobsite </label>
+			<input type="text" value={jobsite} name="jobsite" onChange={(e) => setJobsite(e.target.value)}/>
+			<label> Company </label>
+			<input type="text" value={company} name="company" onChange={(e) => setCompany(e.target.value)}/>
+			<label>Password</label>
+			<input type="text" value={title} name="title" onChange={(e) => setTitle(e.target.value)}/>
+			<button type="submit"> Submit </button>
+		</form>
 	)
 }
 
@@ -147,7 +177,7 @@ function AccountInput() {
 		await fetch("http://localhost:3000/accounts", {
 			method: "POST",
 			headers: {
-				'Content-Type': 'application/json' // Set the content type
+				'Content-Type': 'application/json' 
 			},
 			body: JSON.stringify({company, username, password})
 		})
