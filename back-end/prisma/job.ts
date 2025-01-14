@@ -11,3 +11,11 @@ export function addJob(job: Job) {
 export function getJobs() {
     return prisma.job.findMany()
 }
+
+export function deleteJob(id) {
+    return prisma.job.delete({
+        where: {
+            id
+        }
+    })
+}

@@ -55,7 +55,8 @@ export default function Table({ type }) {
 		<div className="text-center py-8 text-gray-600">Loading...</div>
 	);
 
-    const filtered = searchTerm === "" 
+    console.log(type, searchTerm, searchValue)
+    const filtered = searchValue === "" 
         ? data
         : data.filter(entry => entry[searchTerm].toLowerCase().includes(searchValue))
 
@@ -97,6 +98,15 @@ export default function Table({ type }) {
 										{entry[column]}
 									</td>
 								))}
+                                {/* <button type="button" onClick={() => fetch("http://localhost:3000/", {
+                                    method: "DELETE",
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        id: entry["id"]
+                                    })
+                                })}/> */}
 							</tr>
 						))}
 					</tbody>

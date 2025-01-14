@@ -11,3 +11,11 @@ export function addAccount(account: Account) {
         data: account
     })
 }
+
+export function deleteAccount(id) {
+    return prisma.account.delete({
+        where: {
+            id
+        }
+    })
+}
