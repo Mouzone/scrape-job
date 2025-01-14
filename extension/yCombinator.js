@@ -5,7 +5,7 @@ function scrapeYCombinator() {
     const title = headerList[0].trim();
     const company = headerList[1].split("(")[0].trim();
     
-    fetch("http://localhost:3000/job/add",
+    fetch("http://localhost:3000/jobs",
         {
             method: "POST",
             headers: {

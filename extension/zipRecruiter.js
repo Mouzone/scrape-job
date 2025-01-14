@@ -4,7 +4,7 @@ function scrapeZipRecruiter() {
     
     const title = jobTitleElement.textContent;
     const company = companyElement.textContent;
-    fetch("http://localhost:3000/job/add",
+    fetch("http://localhost:3000/jobs",
         {
             method: "POST",
             headers: {

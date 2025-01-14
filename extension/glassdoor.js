@@ -5,7 +5,7 @@ function scrapeGlassDoor() {
     const company = companyElement.textContent;
     const title = jobTitleElement.textContent;
     
-    fetch("http://localhost:3000/job/add",
+    fetch("http://localhost:3000/jobs",
         {
             method: "POST",
             headers: {
