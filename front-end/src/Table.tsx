@@ -40,9 +40,12 @@ export default function Table({ type }) {
 
 	useEffect(() => {
 		setPageIndex(0);
-        setSearchTerm(columns[type][0]);
-        setSearchValue("");
 	}, [type, searchValue]);
+
+    useEffect(() => {
+        setSearchTerm(columns[type][0]);
+        setSearchValue("")
+    }, [type])
 
 	if (error) return (
 		<div className="text-center py-8 text-red-600">Failed to load</div>
