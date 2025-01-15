@@ -9,29 +9,8 @@ const columns = {
 	jobs: ["applied", "jobsite", "company", "title"]
 };
 
-function Search({type, searchTerm, setSearchTerm, searchValue, setSearchValue}) {
-    return (
-        <>
-            <select 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-                {
-                    columns[type].map((column) => {
-                        return <option key={column} value={column}> {column} </option>
-                    })
-                }
-            </select>
-            <input type="text" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
-        </>
-    )
-}
-
-export default function Table({ type }) {
+export default function Table({ type, searchTerm, setSearchTerm, searchValue, setSearchValue }) {
 	const [pageIndex, setPageIndex] = useState(0);    
-    const [searchTerm, setSearchTerm] = useState(columns[type][0]);
-    const [searchValue, setSearchValue] = useState("");
 
     const { data, error, isLoading } = useSWR(
 		"http://localhost:3000/" + type,
@@ -64,13 +43,6 @@ export default function Table({ type }) {
 
 	return (
 		<>
-            <Search 
-                type={type}
-                searchTerm={searchTerm} 
-                setSearchTerm={setSearchTerm} 
-                searchValue={searchValue} 
-                setSearchValue={setSearchValue}
-            />
 			<div className="overflow-x-auto rounded-lg border border-gray-200">
 				<table className="w-full border-collapse">
 					<thead>
