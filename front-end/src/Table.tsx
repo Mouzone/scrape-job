@@ -53,6 +53,7 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
 									{header.charAt(0).toUpperCase() + header.substring(1)}
 								</th>
 							))}
+                            <th className="p-4 text-left text-gray-600 font-medium border-b"> Delete </th>
 						</tr>
 					</thead>
 					<tbody>
@@ -69,8 +70,11 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
 										{entry[column]}
 									</td>
 								))}
-                                <td className="p-4 border-b">
-                                    <button type="button" onClick={() => fetch("http://localhost:3000/" + type, {
+                                <td className="flex items-center justify-center p-4 border-b">
+                                    <button 
+                                        className="flex items-center justify-center hover:bg-gray-100 rounded p-2 transition-colors"
+                                        type="button"
+                                        onClick={() => fetch("http://localhost:3000/" + type, {
                                         method: "DELETE",
                                         headers: {
                                             'Content-Type': 'application/json'
@@ -78,8 +82,16 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
                                         body: JSON.stringify({
                                             id: entry["id"]
                                         })
-                                    })}>
-                                        Delete
+                                        })}
+                                    >
+                                        <svg 
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            className="fill-black w-5"
+                                            >
+                                            <title>delete</title>
+                                            <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                                        </svg>
                                     </button>
                                 </td>
 							</tr>
