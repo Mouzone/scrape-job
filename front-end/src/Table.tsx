@@ -69,15 +69,19 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
 										{entry[column]}
 									</td>
 								))}
-                                {/* <button type="button" onClick={() => fetch("http://localhost:3000/", {
-                                    method: "DELETE",
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        id: entry["id"]
-                                    })
-                                })}/> */}
+                                <td className="p-4 border-b">
+                                    <button type="button" onClick={() => fetch("http://localhost:3000/" + type, {
+                                        method: "DELETE",
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            id: entry["id"]
+                                        })
+                                    })}>
+                                        Delete
+                                    </button>
+                                </td>
 							</tr>
 						))}
 					</tbody>

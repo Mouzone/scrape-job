@@ -35,7 +35,7 @@ const app = new Elysia()
             id: t.Integer()
         })
     })
-    .delete("/jobs", async({body}) => {
+    .delete("/accounts", async({body}) => {
         await deleteAccount(body["id"])
     }, {
         body: t.Object({
