@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Forms from "./Inputs";
 import TablePage from "./TablePage";
+import TabButton from "./TabButton";
 
 function App() {
 	const [page, setPage] = useState("table");
@@ -11,26 +12,8 @@ function App() {
 				<div className="border-b border-gray-200">
 					<div className="p-4 md:p-6">
 						<nav className="flex gap-2 md:gap-4">
-							<button
-								onClick={() => setPage("table")}
-								className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ease-in-out ${
-									page === "table"
-										? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-										: "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900"
-								}`}
-							>
-								View Data
-							</button>
-							<button
-								onClick={() => setPage("inputs")}
-								className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ease-in-out ${
-									page === "inputs"
-										? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-										: "bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900"
-								}`}
-							>
-								Create New
-							</button>
+                            <TabButton onClick={() => setPage("table")} text="View Data" value="table" data={page}/>
+                            <TabButton onClick={() => setPage("inputs")} text="Create New" value="inputs" data={page}/>
 						</nav>
 					</div>
 				</div>
