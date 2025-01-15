@@ -1,5 +1,18 @@
 import { useEffect, useState } from "react"
 
+const fields = {
+	jobs: {
+		jobsite: "",
+		company: "",
+		title: ""
+	},
+	accounts: {
+		company: "",
+		username: "",
+		password: ""
+	}
+}
+
 function Forms() {
 		const [selectedForm, setSelectedForm] = useState('jobs');
 	
@@ -26,22 +39,9 @@ function Forms() {
 		);
 	};
 
-const fields = {
-	jobs: {
-		jobsite: "",
-		company: "",
-		title: ""
-	},
-	accounts: {
-		company: "",
-		username: "",
-		password: ""
-	}
-}
-
 function Inputs({type}) {
 	const [form, setForm] = useState(fields[type])
-	
+
 	useEffect(() => {
 		setForm(fields[type])
 	}, [type])
