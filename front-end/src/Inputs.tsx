@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-function Inputs() {
-		const [selectedForm, setSelectedForm] = useState('job');
+function Forms() {
+		const [selectedForm, setSelectedForm] = useState('jobs');
 	
 		return (
 			<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -14,81 +14,68 @@ function Inputs() {
 						onChange={(e) => setSelectedForm(e.target.value)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					>
-						<option value="job"> Job </option>
-						<option value="account"> Account </option>
+						<option value="jobs"> Job </option>
+						<option value="accounts"> Account </option>
 					</select>
 				</div>
 	
 				<div className="mt-4">
-					{selectedForm === 'job' ? <JobInputs /> : <AccountInputs/>}
+					<Inputs type={selectedForm} />
 				</div>
 			</div>
 		);
 	};
+
+const fields = {
+	jobs: {
+		jobsite: "",
+		company: "",
+		title: ""
+	},
+	accounts: {
+		company: "",
+		username: "",
+		password: ""
+	}
+}
+
+function Inputs({type}) {
+	const [form, setForm] = useState(fields[type])
 	
-function JobInputs() {
-		const [jobsite, setJobsite] = useState("");
-		const [company, setCompany] = useState("");
-		const [title, setTitle] = useState("");
-	
-		const onSubmit = async (e) => {
-			e.preventDefault();
-			if (!jobsite || !company || !title) {
-				return
+	useEffect(() => {
+		setForm(fields[type])
+	}, [type])
+
+	const onSubmit = async(e) => {
+		e.preventDefault();
+		if (!Object.values(form).every(value => value !== "")) {
+			return
+		}
+		await fetch("http://localhost:3000/" + type, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(form)
+		});
+		setForm(fields[type])
+	}
+
+	return (
+		<form onSubmit={onSubmit} className="space-y-4">
+			{
+				Object.entries(form).map(([key, value]) => (
+					<Input 
+						key={key}
+						label={key.charAt(0).toUpperCase() + key.slice(1)}
+						value={value}
+						onChange={(e) => setForm({...form, [key]: e.target.value})}
+					/>))
 			}
-			await fetch("http://localhost:3000/jobs", {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ jobsite, company, title })
-			});
-			setJobsite("")
-			setCompany("")
-			setTitle("")
-		};
-	
-		return (
-			<form onSubmit={onSubmit} className="space-y-4">
-				<Input label="Jobsite" value={jobsite} onChange={(e) => setJobsite(e.target.value)}/>
-				<Input label="Company" value={company} onChange={(e) => setCompany(e.target.value)}/>
-				<Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
-				<SubmitButton/>
-			</form>
-		);
-	};
-	
-function AccountInputs() {
-		const [company, setCompany] = useState("");
-		const [username, setUsername] = useState("");
-		const [password, setPassword] = useState("");
-	
-		const onSubmit = async (e) => {
-			e.preventDefault();
-			if (!company || !username || !password) {
-				return
-			}
-			await fetch("http://localhost:3000/accounts", {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ company, username, password })
-			});
-			setCompany("")
-			setUsername("")
-			setPassword("")
-		};
-	
-		return (
-			<form onSubmit={onSubmit} className="space-y-4">
-				<Input label="Company" value={company} onChange={(e) => setCompany(e.target.value)}/>
-				<Input label="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
-				<Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-				<SubmitButton/>
-			</form>
-		);
-	};
+			<SubmitButton/>
+		</form>
+	)
+}
 
 function Input({label, value, onChange}) {
 	return (
@@ -117,4 +104,4 @@ function SubmitButton() {
 		</button>
 	)
 }
-export default Inputs
+export default Forms

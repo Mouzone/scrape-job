@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Inputs from "./Inputs";
+import Forms from "./Inputs";
 import TablePage from "./TablePage";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
 				</div>
 
 				<div className="p-4 md:p-6">
-					{page === "table" ? <TablePage /> : <Inputs />}
+					{page === "table" ? <TablePage /> : <Forms />}
 				</div>
 			</div>
 		</div>
