@@ -45,8 +45,8 @@ export default function Table({ type, error, isLoading, data }) {
 					<TableHead type={type}/>
                     <TableBody type={type} pageIndex={pageIndex} data={paginated} setToDelete={toDelete}/>
 				</table>
-                <Nav pageIndex={pageIndex} setPageIndex={setPageIndex} filtered={data}/>
 			</div>
+            <Nav pageIndex={pageIndex} setPageIndex={setPageIndex} filtered={data}/>
 		</>
 	);
 }
@@ -148,7 +148,7 @@ function Nav({pageIndex, setPageIndex, filtered}) {
     const limit = Math.floor(filtered.length / 50) * 50;
 
     return (
-        <div className="mt-6 flex justify-between items-center">
+        <div className="m-6 flex justify-between items-center">
             <div className="text-sm text-gray-600">
                 Showing {pageIndex + 1}-{Math.min(pageIndex + 50, filtered.length)} of {filtered.length}
             </div>
