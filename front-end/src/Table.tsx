@@ -9,7 +9,7 @@ const columns = {
 export default function Table({ type, error, isLoading, data }) {
 	const [pageIndex, setPageIndex] = useState(0);    
     const [toDelete, setToDelete] = useState(null);
-
+    console.log(toDelete)
     useEffect(() => {
         setPageIndex(0)
     }, [type])
@@ -43,7 +43,7 @@ export default function Table({ type, error, isLoading, data }) {
 			<div className="overflow-x-auto rounded-lg border border-gray-200">
 				<table className="w-full border-collapse">
 					<TableHead type={type}/>
-                    <TableBody type={type} pageIndex={pageIndex} data={paginated} setToDelete={toDelete}/>
+                    <TableBody type={type} pageIndex={pageIndex} data={paginated} setToDelete={setToDelete}/>
 				</table>
 			</div>
             <Nav pageIndex={pageIndex} setPageIndex={setPageIndex} filtered={data}/>
