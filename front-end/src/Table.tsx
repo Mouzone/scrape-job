@@ -99,14 +99,14 @@ function TableBody({type, data, pageIndex, setToDelete}) {
             {
                 data.map((entry, index) => (
                     <tr 
-                        key={pageIndex + index + 1}
+                        key={entry["id"]}
                         className="hover:bg-gray-50 transition-colors"
                     >
                         <td className="p-4 border-b text-gray-500">
                             {pageIndex + index + 1}
                         </td>
                         {columns[type].map((column) => (
-                            <ModifiableCell key={column} value={entry[column]}/>
+                            <ModifiableCell id={entry["id"]} column={column} value={entry[column]}/>
                         ))}
                         <DeleteButton setToDelete={setToDelete} id={entry["id"]}/>
                     </tr>
@@ -116,10 +116,16 @@ function TableBody({type, data, pageIndex, setToDelete}) {
     )
 }
 
-function ModifiableCell({key, value}) {
+function ModifiableCell({id, column, value}) {
+    const [disabled, setDisabled] = useState(true)
     return (
-        <td key={key} className="p-4 border-b">
-            {value}
+        <td key={column} 
+            onDoubleClick={() => setDisabled(!disabled)}
+            className="p-4 border-b">
+            <input
+                value={value}
+                disabled={disabled}
+            />
         </td>
     )
 }
