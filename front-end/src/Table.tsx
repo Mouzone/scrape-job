@@ -1,29 +1,16 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import useSWR from "swr";
-
-const fetcher = (...args) => fetch(...args).then(res => res.json());
 
 const columns = {
 	accounts: ["company", "username", "password"],
 	jobs: ["applied", "jobsite", "company", "title"]
 };
 
-export default function Table({ type, searchTerm, setSearchTerm, searchValue, setSearchValue }) {
+export default function Table({ type, error, isLoading, data }) {
 	const [pageIndex, setPageIndex] = useState(0);    
-
-    const { data, error, isLoading } = useSWR(
-		"http://localhost:3000/" + type,
-		fetcher
-	);
-
-	useEffect(() => {
-		setPageIndex(0);
-	}, [type, searchValue]);
-
+    
     useEffect(() => {
-        setSearchTerm(columns[type][0]);
-        setSearchValue("")
+        setPageIndex(0)
     }, [type])
 
 	if (error) return (
@@ -34,11 +21,7 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
 		<div className="text-center py-8 text-gray-600">Loading...</div>
 	);
 
-    const filtered = searchValue === "" 
-        ? data
-        : data.filter(entry => entry[searchTerm].toLowerCase().includes(searchValue))
-
-	const paginated = filtered.slice(pageIndex, pageIndex + 50);
+    const paginated = data.slice(pageIndex, pageIndex + 50);
 
 	return (
 		<>
@@ -97,7 +80,7 @@ export default function Table({ type, searchTerm, setSearchTerm, searchValue, se
 						))}
 					</tbody>
 				</table>
-                <Nav pageIndex={pageIndex} setPageIndex={setPageIndex} filtered={filtered}/>
+                <Nav pageIndex={pageIndex} setPageIndex={setPageIndex} filtered={data}/>
 			</div>
 		</>
 	);

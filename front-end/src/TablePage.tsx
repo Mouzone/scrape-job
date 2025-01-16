@@ -1,24 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
+import useSWR from "swr";
 
 const columns = {
 	accounts: ["company", "username", "password"],
 	jobs: ["applied", "jobsite", "company", "title"]
 };
 
+const fetcher = (...args) => fetch(...args).then(res => res.json());
+
 export default function TablePage() {
-	const [data, setData] = useState("jobs");
-    const [searchTerm, setSearchTerm] = useState(columns[data][0]);
+	const [type, setType] = useState("jobs");
+    const [searchTerm, setSearchTerm] = useState(columns[type][0]);
     const [searchValue, setSearchValue] = useState("");
+
+    useEffect(() => {
+        setSearchTerm(columns[type][0]);
+        setSearchValue("")
+    }, [type])
+
+    const { data, error, isLoading } = useSWR(
+            "http://localhost:3000/" + type,
+            fetcher
+        );
+
+    const filtered = searchValue === "" 
+        ? data
+        : data.filter(entry => entry[searchTerm].toLowerCase().includes(searchValue))
 
     return (
         <>
             <div className="mb-6 flex gap-4">
-                <TabButton onClick={() => setData("jobs")} text="Jobs" value="jobs" data={data}/>
-                <TabButton onClick={() => setData("accounts")} text="Accounts" value="accounts" data={data}/>
+                <TabButton onClick={() => setType("jobs")} text="Jobs" value="jobs" data={type}/>
+                <TabButton onClick={() => setType("accounts")} text="Accounts" value="accounts" data={type}/>
                 <Search 
-                    type={data}
+                    type={type}
                     searchTerm={searchTerm} 
                     setSearchTerm={setSearchTerm} 
                     searchValue={searchValue} 
@@ -26,18 +43,16 @@ export default function TablePage() {
                 />
             </div>
             <Table 
-                type={data} 
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                type={type}
+                error={error}
+                isLoading={isLoading}
+                data={filtered}
             />
         </>
     )
 }
 
 function Search({type, searchTerm, setSearchTerm, searchValue, setSearchValue}) {
-
     return (
         <div className="flex gap-4">
             <select
