@@ -80,7 +80,7 @@ function DeleteConfirmation({toDelete, setToDelete, deleteEntry}) {
 function TableHead({type}) {
     return (
         <thead>
-            <tr className="bg-gray-50">
+            <tr className="bg-gray-200">
                 <th className="p-4 text-left text-gray-600 font-medium border-b">#</th>
                 {columns[type].map(header => (
                     <th key={header} className="p-4 text-left text-gray-600 font-medium border-b">
@@ -100,14 +100,16 @@ function TableBody({type, data, pageIndex, setToDelete}) {
                 data.map((entry, index) => (
                     <tr 
                         key={entry["id"]}
-                        className="hover:bg-gray-50 transition-colors"
+                        className={`${index % 2 ? "bg-gray-200" : "bg-white"} hover:bg-blue-100 transition-colors`}
                     >
                         <td className="p-4 border-b text-gray-500">
                             {pageIndex + index + 1}
                         </td>
-                        {columns[type].map((column) => (
-                            <ModifiableCell key={entry["id"] + column} id={entry["id"]} column={column} value={entry[column]}/>
-                        ))}
+                        {
+                            columns[type].map((column) => (
+                                <ModifiableCell key={entry["id"] + column} id={entry["id"]} column={column} value={entry[column]}/>
+                            ))
+                        }
                         <DeleteButton setToDelete={setToDelete} id={entry["id"]}/>
                     </tr>
                 ))
@@ -125,6 +127,7 @@ function ModifiableCell({id, column, value}) {
                 edit
                     ? <input
                         value={newValue}
+                        onBlur={() => setEdit(false)}
                         onChange={(e) => setNewValue(e.target.value)}
                     />
                     : <span
