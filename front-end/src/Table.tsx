@@ -18,10 +18,10 @@ export default function Table({ type, error, isLoading, data }) {
         fetch("http://localhost:3000/" + type, {
             method: "DELETE",
             headers: {
-            'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-            id: toDelete
+                id: toDelete
             })
         })
         setToDelete(null)
@@ -107,7 +107,13 @@ function TableBody({type, data, pageIndex, setToDelete}) {
                         </td>
                         {
                             columns[type].map((column) => (
-                                <ModifiableCell key={entry["id"] + column} id={entry["id"]} column={column} value={entry[column]}/>
+                                <ModifiableCell 
+                                    key={entry["id"] + column} 
+                                    type={type} 
+                                    id={entry["id"]} 
+                                    column={column} 
+                                    value={entry[column]}
+                                />
                             ))
                         }
                         <DeleteButton setToDelete={setToDelete} id={entry["id"]}/>
@@ -118,17 +124,38 @@ function TableBody({type, data, pageIndex, setToDelete}) {
     )
 }
 
-function ModifiableCell({id, column, value}) {
+function ModifiableCell({type, id, column, value}) {
     const [edit, setEdit] = useState(false)
     const [newValue, setNewValue] = useState(value)
+
+    const sendEdit = () => {
+        setEdit(false)
+        fetch("http://localhost:3000/" + type, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id,
+                column,
+                newValue
+            })
+        })
+    }
+
     return (
         <td className="p-4 border-b">
             {
                 edit
                     ? <input
                         value={newValue}
-                        onBlur={() => setEdit(false)}
+                        onBlur={() => sendEdit()}
                         onChange={(e) => setNewValue(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                sendEdit()
+                            }
+                        }}
                     />
                     : <span
                         onDoubleClick={() => setEdit(true)}
@@ -136,7 +163,6 @@ function ModifiableCell({id, column, value}) {
                         {value}
                     </span>
             }
-            
         </td>
     )
 }
