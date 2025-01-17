@@ -9,7 +9,7 @@ const columns = {
 export default function Table({ type, error, isLoading, data }) {
 	const [pageIndex, setPageIndex] = useState(0);    
     const [toDelete, setToDelete] = useState(null);
-    console.log(toDelete)
+
     useEffect(() => {
         setPageIndex(0)
     }, [type])
@@ -106,7 +106,7 @@ function TableBody({type, data, pageIndex, setToDelete}) {
                             {pageIndex + index + 1}
                         </td>
                         {columns[type].map((column) => (
-                            <ModifiableCell id={entry["id"]} column={column} value={entry[column]}/>
+                            <ModifiableCell key={entry["id"] + column} id={entry["id"]} column={column} value={entry[column]}/>
                         ))}
                         <DeleteButton setToDelete={setToDelete} id={entry["id"]}/>
                     </tr>
@@ -117,15 +117,23 @@ function TableBody({type, data, pageIndex, setToDelete}) {
 }
 
 function ModifiableCell({id, column, value}) {
-    const [disabled, setDisabled] = useState(true)
+    const [edit, setEdit] = useState(false)
+    const [newValue, setNewValue] = useState(value)
     return (
-        <td key={column} 
-            onDoubleClick={() => setDisabled(!disabled)}
-            className="p-4 border-b">
-            <input
-                value={value}
-                disabled={disabled}
-            />
+        <td className="p-4 border-b">
+            {
+                edit
+                    ? <input
+                        value={newValue}
+                        onChange={(e) => setNewValue(e.target.value)}
+                    />
+                    : <span
+                        onDoubleClick={() => setEdit(true)}
+                    >
+                        {value}
+                    </span>
+            }
+            
         </td>
     )
 }
