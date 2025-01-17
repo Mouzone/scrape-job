@@ -39,7 +39,6 @@ export default function Table({ type, error, isLoading, data }) {
     const sortedData = type === "jobs" && !increasing 
         ? [...data].reverse() 
         : data
-
     const paginated = sortedData.slice(pageIndex, pageIndex + 50);
 
 	return (
@@ -91,14 +90,14 @@ function TableHead({type, setIncreasing, increasing}) {
                     columns[type].map(header => (
                         <th 
                             key={header} 
-                            className="p-4 text-left text-gray-600 font-medium border-b"
+                            className={`${header === "applied" ? "flex" : ""} p-4 text-left text-gray-600 font-medium border-b`}
                             onClick={() => {
                                 if (header === 'applied') {
                                     setIncreasing(!increasing)
                                 }}
                             }
                         >
-                            {header.charAt(0).toUpperCase() + header.substring(1)}
+                            <span> { header.charAt(0).toUpperCase() + header.substring(1) }</span>
                             {
                                 header === "applied" && (
                                     increasing
