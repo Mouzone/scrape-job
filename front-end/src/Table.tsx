@@ -9,10 +9,17 @@ const columns = {
 export default function Table({ type, error, isLoading, data }) {
 	const [pageIndex, setPageIndex] = useState(0);    
     const [toDelete, setToDelete] = useState(null);
-
+    const [increasing, setIncreasing] = useState(false);
+    console.log(type, error, isLoading, increasing)
     useEffect(() => {
         setPageIndex(0)
     }, [type])
+
+    useEffect(() => {
+        if (type === "jobs" && data) {
+            data.reverse()
+        }
+    }, [increasing, data])
 
     const deleteEntry = () => {
         fetch("http://localhost:3000/" + type, {
@@ -42,7 +49,7 @@ export default function Table({ type, error, isLoading, data }) {
             <DeleteConfirmation deleteEntry={deleteEntry} toDelete={toDelete} setToDelete={setToDelete}/>
 			<div className="overflow-x-auto rounded-lg border border-gray-200">
 				<table className="w-full border-collapse">
-					<TableHead type={type}/>
+					<TableHead type={type} setIncreasing={setIncreasing} increasing={increasing}/>
                     <TableBody type={type} pageIndex={pageIndex} data={paginated} setToDelete={setToDelete}/>
 				</table>
 			</div>
@@ -77,16 +84,34 @@ function DeleteConfirmation({toDelete, setToDelete, deleteEntry}) {
     )
 }
 
-function TableHead({type}) {
+function TableHead({type, setIncreasing, increasing}) {
     return (
         <thead>
             <tr className="bg-gray-200">
                 <th className="p-4 text-left text-gray-600 font-medium border-b">#</th>
-                {columns[type].map(header => (
-                    <th key={header} className="p-4 text-left text-gray-600 font-medium border-b">
-                        {header.charAt(0).toUpperCase() + header.substring(1)}
-                    </th>
-                ))}
+                {
+                    columns[type].map(header => (
+                        <th 
+                            key={header} 
+                            className="p-4 text-left text-gray-600 font-medium border-b"
+                            onClick={() => {
+                                if (header === 'applied') {
+                                    setIncreasing(!increasing)
+                                }}
+                            }
+                        >
+                            {header.charAt(0).toUpperCase() + header.substring(1)}
+                            {
+                                header === "applied" && (
+                                    increasing
+                                    ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu-up</title><path d="M7,15L12,10L17,15H7Z" /></svg>
+                                    : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu-down</title><path d="M7,10L12,15L17,10H7Z" /></svg>
+                                    
+                                )
+                            }
+                        </th>
+                    ))
+                }
                 <th className="p-4 text-left text-gray-600 font-medium border-b"> Delete </th>
             </tr>
         </thead>
