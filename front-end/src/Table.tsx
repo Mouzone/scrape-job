@@ -15,12 +15,6 @@ export default function Table({ type, error, isLoading, data }) {
         setPageIndex(0)
     }, [type])
 
-    useEffect(() => {
-        if (type === "jobs" && data) {
-            data.reverse()
-        }
-    }, [increasing, data])
-
     const deleteEntry = () => {
         fetch("http://localhost:3000/" + type, {
             method: "DELETE",
@@ -42,7 +36,11 @@ export default function Table({ type, error, isLoading, data }) {
 		<div className="text-center py-8 text-gray-600">Loading...</div>
 	);
 
-    const paginated = data.slice(pageIndex, pageIndex + 50);
+    const sortedData = type === "jobs" && !increasing 
+        ? [...data].reverse() 
+        : data
+
+    const paginated = sortedData.slice(pageIndex, pageIndex + 50);
 
 	return (
 		<>
