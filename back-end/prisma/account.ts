@@ -19,3 +19,14 @@ export function deleteAccount(id) {
         }
     })
 }
+
+export function updateAccount(id, column, newValue) {
+    return prisma.account.update({
+        where: {
+            id
+        },
+        data: {
+            [column]: newValue
+        }
+    })
+}

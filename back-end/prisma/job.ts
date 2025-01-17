@@ -19,3 +19,14 @@ export function deleteJob(id) {
         }
     })
 }
+
+export function updateJob(id, column, newValue) {
+    return prisma.job.update({
+        where: {
+            id
+        },
+        data: {
+            [column]: newValue
+        }
+    })
+}

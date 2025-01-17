@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors';
-import { addJob, getJobs, deleteJob } from "../prisma/job";
-import { getAccounts, addAccount, deleteAccount } from "../prisma/account";
+import { addJob, getJobs, deleteJob, updateJob } from "../prisma/job";
+import { getAccounts, addAccount, deleteAccount, updateAccount } from "../prisma/account";
 import { JobSchema, AccountSchema } from "../types";
 import formatDateTime from "./utility/formatDateTime";
 
@@ -40,6 +40,24 @@ const app = new Elysia()
     }, {
         body: t.Object({
             id: t.Integer()
+        })
+    })
+    .put("/jobs", async({body}) => {
+        await updateJob(body["id"], body["column"], body["newValue"])
+    }, {
+        body: t.Object({
+            id: t.Integer(),
+            column: t.String(),
+            newValue: t.String()
+        })
+    })
+    .put("/accounts", async({body}) => {
+        await updateAccount(body["id"], body["column"], body["newValue"])
+    }, {
+        body: t.Object({
+            id: t.Integer(),
+            column: t.String(),
+            newValue: t.String()
         })
     })
     .listen(3000);
