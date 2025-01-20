@@ -85,18 +85,18 @@ function TableHead({type, setIncreasing, increasing}) {
     return (
         <thead>
             <tr className="bg-gray-200">
-                <th className="p-4 text-left text-gray-600 font-medium border-b">#</th>
+                <th className="p-4 w-24 min-w-24 text-gray-600 font-medium border-b">#</th>
                 {
                     columns[type].map(header => (
                         <th
-                            className="p-4 border-b w-48 min-w-48 group cursor-pointer"
+                            className={`p-4 border-b w-48 min-w-48 ${header === "applied" ? "cursor-pointer" : ""}`}
                             onClick={() => {
                                 if (header === "applied") {
                                     setIncreasing(!increasing);
                                 }
                             }}
                         >
-                            <div className="flex items-center justify-between text-gray-600 font-medium">
+                            <div className="flex items-center text-gray-600 font-medium">
                                 <span className="truncate">
                                     {header.charAt(0).toUpperCase() + header.substring(1)}
                                 </span>
@@ -114,7 +114,7 @@ function TableHead({type, setIncreasing, increasing}) {
                         </th>
                     ))
                 }
-                <th className="p-4 text-left text-gray-600 font-medium border-b text-center"> Delete </th>
+                <th className="p-4 text-gray-600 font-medium border-b text-center"> Delete </th>
             </tr>
         </thead>
     )
@@ -129,7 +129,7 @@ function TableBody({type, data, pageIndex, setToDelete}) {
                         key={entry["id"]}
                         className={`${index % 2 ? "bg-gray-200" : "bg-white"} hover:bg-blue-100 transition-colors`}
                     >
-                        <td className="p-4 border-b text-gray-500">
+                        <td className="p-4 border-b text-gray-500 text-center">
                             {pageIndex + index + 1}
                         </td>
                         {
