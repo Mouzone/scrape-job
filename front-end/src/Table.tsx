@@ -45,7 +45,7 @@ export default function Table({ type, error, isLoading, data }) {
 		<>
             <DeleteConfirmation deleteEntry={deleteEntry} toDelete={toDelete} setToDelete={setToDelete}/>
 			<div className="overflow-x-auto rounded-lg border border-gray-200">
-				<table className="w-full border-collapse">
+				<table className="w-full border-collapse table-auto">
 					<TableHead type={type} setIncreasing={setIncreasing} increasing={increasing}/>
                     <TableBody type={type} pageIndex={pageIndex} data={paginated} setToDelete={setToDelete}/>
 				</table>
@@ -88,41 +88,33 @@ function TableHead({type, setIncreasing, increasing}) {
                 <th className="p-4 text-left text-gray-600 font-medium border-b">#</th>
                 {
                     columns[type].map(header => (
-                        <th 
-                            key={header} 
-                            className={`${header === "applied" ? "flex" : ""} p-4 text-left text-gray-600 font-medium border-b`}
+                        <th
+                            className="p-4 border-b w-48 min-w-48 group cursor-pointer"
                             onClick={() => {
-                                if (header === 'applied') {
-                                    setIncreasing(!increasing)
-                                }}
-                            }
+                                if (header === "applied") {
+                                    setIncreasing(!increasing);
+                                }
+                            }}
                         >
-                            <span> { header.charAt(0).toUpperCase() + header.substring(1) }</span>
-                            {
-                                header === "applied" && (
-                                    increasing
-                                    ? <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
+                            <div className="flex items-center justify-between text-gray-600 font-medium">
+                                <span className="truncate">
+                                    {header.charAt(0).toUpperCase() + header.substring(1)}
+                                </span>
+                                {header === "applied" && (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
-                                        className="w-5"
+                                        className="w-5 h-5 flex-shrink-0 ml-2"
                                     >
-                                        <title>menu-down</title>
-                                        <path d="M7,10L12,15L17,10H7Z" />
+                                        <title>{increasing ? 'menu-down' : 'menu-up'}</title>
+                                        <path d={increasing ? "M7,10L12,15L17,10H7Z" : "M7,15L12,10L17,15H7Z"} />
                                     </svg>
-                                    : <svg 
-                                        xmlns="http://www.w3.org/2000/svg" 
-                                        viewBox="0 0 24 24"
-                                        className="w-5"
-                                    >
-                                        <title>menu-up</title>
-                                        <path d="M7,15L12,10L17,15H7Z" />
-                                    </svg>
-                                )
-                            }
+                                )}
+                            </div>
                         </th>
                     ))
                 }
-                <th className="p-4 text-left text-gray-600 font-medium border-b"> Delete </th>
+                <th className="p-4 text-left text-gray-600 font-medium border-b text-center"> Delete </th>
             </tr>
         </thead>
     )
