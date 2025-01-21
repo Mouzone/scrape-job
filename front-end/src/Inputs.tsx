@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 const fields = {
 	jobs: {
@@ -13,8 +13,10 @@ const fields = {
 	}
 }
 
+type Type = "jobs" | "accounts"
+
 function Forms() {
-		const [selectedForm, setSelectedForm] = useState('jobs');
+		const [selectedForm, setSelectedForm] = useState<Type>('jobs');
 	
 		return (
 			<div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -24,7 +26,7 @@ function Forms() {
 					</label>
 					<select 
 						value={selectedForm}
-						onChange={(e) => setSelectedForm(e.target.value)}
+						onChange={(e) => setSelectedForm(e.target.value as Type)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					>
 						<option value="jobs"> Job </option>
@@ -39,14 +41,14 @@ function Forms() {
 		);
 	};
 
-function Inputs({type}) {
+function Inputs({type}: {type: Type}) {
 	const [form, setForm] = useState(fields[type])
 
 	useEffect(() => {
 		setForm(fields[type])
 	}, [type])
 
-	const onSubmit = async(e) => {
+	const onSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!Object.values(form).every(value => value !== "")) {
 			return
@@ -77,7 +79,7 @@ function Inputs({type}) {
 	)
 }
 
-function Input({label, value, onChange}) {
+function Input({label, value, onChange}: {label: string, value: string, onChange: React.ChangeEventHandler<HTMLInputElement>}) {
 	return (
 		<div>
 			<label className="block text-sm font-medium text-gray-700 mb-1">

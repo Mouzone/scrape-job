@@ -1,14 +1,31 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+type Type = "jobs" | "accounts"
+type Delete = number | null
+type Job = {
+    id: number,
+    applied: string,
+    company: string,
+    job: string,
+    title: string
+}
+type JobKeys = keyof Job
+type Account = {
+    id: number,
+    company: string,
+    username: string,
+    password: string
+}
+type AccountKeys = keyof Account
 const columns = {
-	accounts: ["company", "username", "password"],
-	jobs: ["applied", "jobsite", "company", "title"]
+	accounts: ["company", "username", "password"] as Array<AccountKeys>,
+	jobs: ["applied", "jobsite", "company", "title"] as Array<JobKeys>
 };
 
-export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }) {
-    const [toDelete, setToDelete] = useState(null);
-    const [increasing, setIncreasing] = useState(true);
+export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }: {type: Type, pageIndex: number, setPageIndex: React.Dispatch<React.SetStateAction<number>>, error: boolean | undefined, isLoading: boolean, data: Array<Job> | Array<Account>}) {
+    const [toDelete, setToDelete] = useState<Delete>(null);
+    const [increasing, setIncreasing] = useState<boolean>(true);
 
     const deleteEntry = () => {
         fetch("http://localhost:3000/" + type, {
@@ -35,7 +52,6 @@ export default function Table({ type, pageIndex, setPageIndex, error, isLoading,
         ? [...data].reverse() 
         : data
     const paginated = sortedData.slice(pageIndex, pageIndex + 50);
-
 	return (
 		<>
             <DeleteConfirmation deleteEntry={deleteEntry} toDelete={toDelete} setToDelete={setToDelete}/>
@@ -50,7 +66,7 @@ export default function Table({ type, pageIndex, setPageIndex, error, isLoading,
 	);
 }
 
-function DeleteConfirmation({toDelete, setToDelete, deleteEntry}) {
+function DeleteConfirmation({toDelete, setToDelete, deleteEntry}: {toDelete: Delete, setToDelete: React.Dispatch<React.SetStateAction<Delete>>, deleteEntry: React.MouseEventHandler<HTMLButtonElement>}) {
     return (
         <div 
             className={`${toDelete === null ? 'hidden' : 'block'} fixed inset-0 bg-black/50 flex items-center justify-center z-50`}
@@ -76,7 +92,7 @@ function DeleteConfirmation({toDelete, setToDelete, deleteEntry}) {
     )
 }
 
-function TableHead({type, setIncreasing, increasing}) {
+function TableHead({type, setIncreasing, increasing}: {type: Type, setIncreasing: React.Dispatch<React.SetStateAction<boolean>>, increasing: boolean}) {
     return (
         <thead>
             <tr className="bg-gray-200">
@@ -84,6 +100,7 @@ function TableHead({type, setIncreasing, increasing}) {
                 {
                     columns[type].map(header => (
                         <th
+                            key={header}
                             className={`p-4 border-b w-48 min-w-48 ${header === "applied" ? "cursor-pointer" : ""}`}
                             onClick={() => {
                                 if (header === "applied") {
@@ -115,7 +132,7 @@ function TableHead({type, setIncreasing, increasing}) {
     )
 }
 
-function TableBody({type, data, pageIndex, setToDelete}) {
+function TableBody({type, data, pageIndex, setToDelete}: {type: Type, data: Array<Job> | Array<Account>, pageIndex: number, setToDelete: React.Dispatch<React.SetStateAction<Delete>>}) {
     return (
         <tbody>
             {
@@ -134,7 +151,7 @@ function TableBody({type, data, pageIndex, setToDelete}) {
                                     type={type} 
                                     id={entry["id"]} 
                                     column={column} 
-                                    value={entry[column]}
+                                    value={entry[column as JobKeys | AccountKeys]}
                                 />
                             ))
                         }
@@ -146,7 +163,7 @@ function TableBody({type, data, pageIndex, setToDelete}) {
     )
 }
 
-function ModifiableCell({type, id, column, value}) {
+function ModifiableCell({type, id, column, value}: {type: Type, id: number, column: string, value: string | number}) {
     const [edit, setEdit] = useState(false)
     const [newValue, setNewValue] = useState(value)
 
@@ -188,7 +205,7 @@ function ModifiableCell({type, id, column, value}) {
         </td>
     )
 }
-function DeleteButton({setToDelete, id}) {
+function DeleteButton({setToDelete, id}: {setToDelete: React.Dispatch<React.SetStateAction<Delete>>, id: number}) {
     return (
         <td className="h-full">
             <div className="flex h-full items-center justify-center p-4">
@@ -211,7 +228,7 @@ function DeleteButton({setToDelete, id}) {
     )
 }
 
-function Nav({pageIndex, setPageIndex, filtered}) {
+function Nav({pageIndex, setPageIndex, filtered}: {pageIndex: number, setPageIndex: React.Dispatch<React.SetStateAction<number>>, filtered: Array<Object>}) {
     const limit = Math.floor(filtered.length / 50) * 50;
 
     return (

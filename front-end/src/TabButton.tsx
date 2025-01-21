@@ -1,4 +1,4 @@
-export default function TabButton({onClick, text, value, data}) {
+export default function TabButton({onClick, text, value, data}: {onClick: React.MouseEventHandler<HTMLButtonElement>, text: string, value: string, data: string}) {
     return (
         <button 
             onClick={onClick}
