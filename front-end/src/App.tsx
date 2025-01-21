@@ -4,7 +4,7 @@ import TablePage from "./TablePage";
 import TabButton from "./TabButton";
 
 function App() {
-	const [page, setPage] = useState("table");
+	const [page, setPage] = useState<"table" | "inputs">("table");
 
 	return (
 		<div className="min-h-screen bg-gray-100 p-4 md:p-8">

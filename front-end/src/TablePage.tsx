@@ -2,23 +2,8 @@ import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
 import useSWR from "swr";
+import {Type, AccountKeys, JobKeys, searchableKeys, Data, Keys, } from "../types"
 
-type Type = "jobs" | "accounts"
-type Job = {
-    id: number,
-    applied: string,
-    company: string,
-    job: string,
-    title: string
-}
-type JobKeys = keyof Job
-type Account = {
-    id: number,
-    company: string,
-    username: string,
-    password: string
-}
-type AccountKeys = keyof Account
 const columns = {
 	accounts: ["company", "username", "password"] as Array<AccountKeys>,
 	jobs: ["applied", "jobsite", "company", "title"] as Array<JobKeys>
@@ -28,7 +13,7 @@ const fetcher = (...args: [string]) => fetch(...args).then(res => res.json());
 
 export default function TablePage() {
 	const [type, setType] = useState<Type>("jobs");
-    const [searchTerm, setSearchTerm] = useState<JobKeys | AccountKeys>(columns[type][0]);
+    const [searchTerm, setSearchTerm] = useState<Keys>(columns[type][0]);
     const [searchValue, setSearchValue] = useState<string>("");
 	const [pageIndex, setPageIndex] = useState<number>(0);    
 
@@ -41,12 +26,12 @@ export default function TablePage() {
         setPageIndex(0)
     }, [searchValue, type])
 
-    const { data, error, isLoading }: { data: Array<Job> | Array<Account>, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
+    const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
 
-    const filtered = searchValue === "" 
+    const filtered = (searchValue === "" 
         ? data
-        : data.filter(entry => entry[searchTerm].toLowerCase().includes(searchValue))
-
+        : data.filter(entry => entry[searchTerm as searchableKeys<typeof entry>].toLowerCase().includes(searchValue))) as Data
+        
     return (
         <>
             <div className="mb-6 flex gap-4">
@@ -72,13 +57,13 @@ export default function TablePage() {
     )
 }
 
-function Search({type, searchTerm, setSearchTerm, searchValue, setSearchValue}: {type: Type, searchTerm: string, setSearchTerm: React.Dispatch<React.SetStateAction<AccountKeys | JobKeys>>, searchValue: string, setSearchValue: React.Dispatch<React.SetStateAction<string>>}) {
+function Search({type, searchTerm, setSearchTerm, searchValue, setSearchValue}: {type: Type, searchTerm: string, setSearchTerm: React.Dispatch<React.SetStateAction<Keys>>, searchValue: string, setSearchValue: React.Dispatch<React.SetStateAction<string>>}) {
     return (
         <div className="flex gap-4">
             <select
                 value={searchTerm}
                 name="search term"
-                onChange={(e) => setSearchTerm(e.target.value as JobKeys)}
+                onChange={(e) => setSearchTerm(e.target.value as Keys)}
                 className=" px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
                 {columns[type].map((column) => (

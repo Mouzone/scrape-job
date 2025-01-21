@@ -1,30 +1,14 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import {Type, Account, AccountKeys, Job, JobKeys, searchableKeys, Data} from "../types"
 
-type Type = "jobs" | "accounts"
-type Delete = number | null
-type Job = {
-    id: number,
-    applied: string,
-    company: string,
-    job: string,
-    title: string
-}
-type JobKeys = keyof Job
-type Account = {
-    id: number,
-    company: string,
-    username: string,
-    password: string
-}
-type AccountKeys = keyof Account
 const columns = {
 	accounts: ["company", "username", "password"] as Array<AccountKeys>,
 	jobs: ["applied", "jobsite", "company", "title"] as Array<JobKeys>
 };
 
-export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }: {type: Type, pageIndex: number, setPageIndex: React.Dispatch<React.SetStateAction<number>>, error: boolean | undefined, isLoading: boolean, data: Array<Job> | Array<Account>}) {
-    const [toDelete, setToDelete] = useState<Delete>(null);
+export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }: {type: Type, pageIndex: number, setPageIndex: React.Dispatch<React.SetStateAction<number>>, error: boolean | undefined, isLoading: boolean, data: Account[] | Job[]}) {
+    const [toDelete, setToDelete] = useState<number | null>(null);
     const [increasing, setIncreasing] = useState<boolean>(true);
 
     const deleteEntry = () => {
@@ -48,10 +32,10 @@ export default function Table({ type, pageIndex, setPageIndex, error, isLoading,
 		<div className="text-center py-8 text-gray-600">Loading...</div>
 	);
 
-    const sortedData = type === "jobs" && !increasing 
+    const sortedData = (type === "jobs" && !increasing 
         ? [...data].reverse() 
-        : data
-    const paginated = sortedData.slice(pageIndex, pageIndex + 50);
+        : data) as Data
+    const paginated = sortedData.slice(pageIndex, pageIndex + 50) as Data
 	return (
 		<>
             <DeleteConfirmation deleteEntry={deleteEntry} toDelete={toDelete} setToDelete={setToDelete}/>
@@ -66,7 +50,7 @@ export default function Table({ type, pageIndex, setPageIndex, error, isLoading,
 	);
 }
 
-function DeleteConfirmation({toDelete, setToDelete, deleteEntry}: {toDelete: Delete, setToDelete: React.Dispatch<React.SetStateAction<Delete>>, deleteEntry: React.MouseEventHandler<HTMLButtonElement>}) {
+function DeleteConfirmation({toDelete, setToDelete, deleteEntry}: {toDelete: number | null, setToDelete: React.Dispatch<React.SetStateAction<number | null>>, deleteEntry: React.MouseEventHandler<HTMLButtonElement>}) {
     return (
         <div 
             className={`${toDelete === null ? 'hidden' : 'block'} fixed inset-0 bg-black/50 flex items-center justify-center z-50`}
@@ -132,7 +116,7 @@ function TableHead({type, setIncreasing, increasing}: {type: Type, setIncreasing
     )
 }
 
-function TableBody({type, data, pageIndex, setToDelete}: {type: Type, data: Array<Job> | Array<Account>, pageIndex: number, setToDelete: React.Dispatch<React.SetStateAction<Delete>>}) {
+function TableBody({type, data, pageIndex, setToDelete}: {type: Type, data: Account[] | Job[], pageIndex: number, setToDelete: React.Dispatch<React.SetStateAction<number | null>>}) {
     return (
         <tbody>
             {
@@ -151,7 +135,7 @@ function TableBody({type, data, pageIndex, setToDelete}: {type: Type, data: Arra
                                     type={type} 
                                     id={entry["id"]} 
                                     column={column} 
-                                    value={entry[column as JobKeys | AccountKeys]}
+                                    value={entry[column as searchableKeys<typeof entry>]}
                                 />
                             ))
                         }
@@ -205,7 +189,7 @@ function ModifiableCell({type, id, column, value}: {type: Type, id: number, colu
         </td>
     )
 }
-function DeleteButton({setToDelete, id}: {setToDelete: React.Dispatch<React.SetStateAction<Delete>>, id: number}) {
+function DeleteButton({setToDelete, id}: {setToDelete: React.Dispatch<React.SetStateAction<number | null>>, id: number}) {
     return (
         <td className="h-full">
             <div className="flex h-full items-center justify-center p-4">

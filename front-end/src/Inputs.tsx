@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Type } from "../types";
 
 const fields = {
 	jobs: {
@@ -12,8 +13,6 @@ const fields = {
 		password: ""
 	}
 }
-
-type Type = "jobs" | "accounts"
 
 function Forms() {
 		const [selectedForm, setSelectedForm] = useState<Type>('jobs');
