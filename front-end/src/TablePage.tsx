@@ -5,8 +5,8 @@ import useSWR from "swr";
 import {Type, AccountKeys, JobKeys, searchableKeys, Data, Keys, } from "../types"
 
 const columns = {
-	accounts: ["company", "username", "password"] as Array<AccountKeys>,
-	jobs: ["applied", "jobsite", "company", "title"] as Array<JobKeys>
+	accounts: ["company", "username", "password"] as AccountKeys[],
+	jobs: ["applied", "jobsite", "company", "title"] as JobKeys[]
 };
 
 const fetcher = (...args: [string]) => fetch(...args).then(res => res.json());

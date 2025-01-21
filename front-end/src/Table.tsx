@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {Type, Account, AccountKeys, Job, JobKeys, searchableKeys, Data} from "../types"
 
 const columns = {
-	accounts: ["company", "username", "password"] as Array<AccountKeys>,
-	jobs: ["applied", "jobsite", "company", "title"] as Array<JobKeys>
+	accounts: ["company", "username", "password"] as AccountKeys[],
+	jobs: ["applied", "jobsite", "company", "title"] as JobKeys[]
 };
 
 export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }: {type: Type, pageIndex: number, setPageIndex: React.Dispatch<React.SetStateAction<number>>, error: boolean | undefined, isLoading: boolean, data: Account[] | Job[]}) {
