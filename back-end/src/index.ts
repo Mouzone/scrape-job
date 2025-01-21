@@ -11,7 +11,7 @@ const app = new Elysia()
 		console.log(body);
 		await addJob(body)
 	}, {
-	   body: JobSchema
+		body: JobSchema
 	})
 	.post("/accounts", async ({body}) => {
 		console.log(body)
@@ -20,7 +20,7 @@ const app = new Elysia()
 		body: AccountSchema
 	})
 	.get("/jobs", async() => {
-	   const results = await getJobs()
+		const results = await getJobs()
 	//  modifies the objects inside results, so we don't have to set the output to another array
 		results.forEach(result => result["applied"] = formatDateTime(result["applied"]))
 		results.sort((a, b) => a["id"] - b["id"])
