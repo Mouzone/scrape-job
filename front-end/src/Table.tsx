@@ -6,14 +6,9 @@ const columns = {
 	jobs: ["applied", "jobsite", "company", "title"]
 };
 
-export default function Table({ type, error, isLoading, data }) {
-	const [pageIndex, setPageIndex] = useState(0);    
+export default function Table({ type, pageIndex, setPageIndex, error, isLoading, data }) {
     const [toDelete, setToDelete] = useState(null);
     const [increasing, setIncreasing] = useState(true);
-
-    useEffect(() => {
-        setPageIndex(0)
-    }, [type])
 
     const deleteEntry = () => {
         fetch("http://localhost:3000/" + type, {

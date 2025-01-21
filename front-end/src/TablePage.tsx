@@ -14,11 +14,16 @@ export default function TablePage() {
 	const [type, setType] = useState("jobs");
     const [searchTerm, setSearchTerm] = useState(columns[type][0]);
     const [searchValue, setSearchValue] = useState("");
+	const [pageIndex, setPageIndex] = useState(0);    
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
         setSearchValue("")
     }, [type])
+
+    useEffect(() => {
+        setPageIndex(0)
+    }, [searchValue, type])
 
     const { data, error, isLoading } = useSWR(
             "http://localhost:3000/" + type,
@@ -44,6 +49,8 @@ export default function TablePage() {
             </div>
             <Table 
                 type={type}
+                pageIndex={pageIndex}
+                setPageIndex={setPageIndex}
                 error={error}
                 isLoading={isLoading}
                 data={filtered}
