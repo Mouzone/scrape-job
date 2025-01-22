@@ -26,6 +26,26 @@ export default function TablePage() {
         setPageIndex(0)
     }, [searchValue, type])
 
+    useEffect(() => {
+        const socket = new WebSocket("ws://localhost:3000/ws")
+        
+        socket.onopen = () => {
+            console.log("Connected")
+        }
+
+        socket.onmessage = (event) => {
+            const message = JSON.parse(event.data)
+        }
+
+        socket.onclose = () => {
+            console.log("Websocket closed")
+        }
+
+        return () => {
+            socket.close()
+        }
+    }, [])
+
     const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
 
     const filtered = (searchValue === "" 
