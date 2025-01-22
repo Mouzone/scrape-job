@@ -179,24 +179,23 @@ function ModifiableCell({type, id, column, value}: {type: Type, id: number, colu
     return (
         <td className="p-4 border-b">
             {
-                edit
-                    ? <input
-                        value={newValue}
-                        onBlur={() => sendEdit()}
-                        onChange={(e) => setNewValue(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                sendEdit()
-                            }
-                        }}
-                    />
-                    : <span
-                        onDoubleClick={() => setEdit(true)}
-                    >
-                        {value}
-                    </span>
+                edit && column !== "applied" 
+                ? <input
+                    value={newValue}
+                    onBlur={sendEdit}
+                    onChange={(e) => setNewValue(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            sendEdit();
+                        }
+                    }}
+                />
+                : <span onDoubleClick={column !== "applied" ? () => setEdit(true) : undefined}>
+                    {value}
+                </span>
             }
         </td>
+
     )
 }
 function DeleteButton({setToDelete, id}: {setToDelete: React.Dispatch<React.SetStateAction<number | null>>, id: number}) {
