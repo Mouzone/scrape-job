@@ -1,10 +1,10 @@
-import type {Job} from "../types";
 import { PrismaClient } from "@prisma/client";
+import { JobModifiableCols, newJobInfo } from "../types";
 const prisma = new PrismaClient();
 
-export function addJob(job: Job) {
+export function addJob(newJobInfo: newJobInfo) {
     return prisma.job.create({
-        data: job
+        data: newJobInfo
     });
 }
 
@@ -12,7 +12,7 @@ export function getJobs() {
     return prisma.job.findMany()
 }
 
-export function deleteJob(id) {
+export function deleteJob(id: number) {
     return prisma.job.delete({
         where: {
             id
@@ -20,7 +20,7 @@ export function deleteJob(id) {
     })
 }
 
-export function updateJob(id, column, newValue) {
+export function updateJob(id: number, column: JobModifiableCols, newValue: string) {
     return prisma.job.update({
         where: {
             id

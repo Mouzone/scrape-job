@@ -21,3 +21,18 @@ export const PutSchema = t.Object({
     column: t.String(),
     newValue: t.String()
 })
+
+export type JobModifiableCols = "jobsite" | "company" | "title"
+export type AccountModifiableCols =  "company" | "username" | "password"
+
+export type newJobInfo = {
+    jobsite: string,
+    company: string,
+    title: string
+}
+
+export type newAccountInfo = {
+    company: string,
+    username: string,
+    password: string
+}

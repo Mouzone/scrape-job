@@ -1,18 +1,18 @@
 import { PrismaClient } from "@prisma/client";
-import { Account } from "../types";
+import { AccountModifiableCols, newAccountInfo } from "../types";
 const prisma = new PrismaClient()
 
 export function getAccounts() {
     return prisma.account.findMany()
 }
 
-export function addAccount(account: Account) {
+export function addAccount(newAccountInfo: newAccountInfo) {
     return prisma.account.create({
-        data: account
+        data: newAccountInfo
     })
 }
 
-export function deleteAccount(id) {
+export function deleteAccount(id: number) {
     return prisma.account.delete({
         where: {
             id
@@ -20,7 +20,7 @@ export function deleteAccount(id) {
     })
 }
 
-export function updateAccount(id, column, newValue) {
+export function updateAccount(id: number, column: AccountModifiableCols, newValue: string) {
     return prisma.account.update({
         where: {
             id

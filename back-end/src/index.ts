@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors';
 import { addJob, getJobs, deleteJob, updateJob } from "../prisma/job";
 import { getAccounts, addAccount, deleteAccount, updateAccount } from "../prisma/account";
-import { PostJobSchema, PostAccountSchema, DeleteSchema, PutSchema } from "../types";
+import { PostJobSchema, PostAccountSchema, DeleteSchema, PutSchema, JobModifiableCols, AccountModifiableCols } from "../types";
 
 const app = new Elysia()
 	.use(cors())
@@ -37,12 +37,12 @@ const app = new Elysia()
 		body: DeleteSchema
 	})
 	.put("/jobs", async({body}) => {
-		await updateJob(body["id"], body["column"], body["newValue"])
+		await updateJob(body["id"], body["column"] as JobModifiableCols, body["newValue"])
 	}, {
 		body: PutSchema
 	})
 	.put("/accounts", async({body}) => {
-		await updateAccount(body["id"], body["column"], body["newValue"])
+		await updateAccount(body["id"], body["column"] as AccountModifiableCols, body["newValue"])
 	}, {
 		body: PutSchema
 	})
