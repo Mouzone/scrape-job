@@ -1,25 +1,23 @@
 import { t } from 'elysia'
 
-export const JobSchema = t.Object({
+export const PostJobSchema = t.Object({
     jobsite: t.String(),
     company: t.String(),
     title: t.String()
 })
 
-export type Job = {
-    jobsite: string
-    company: string
-    title: string
-}
-
-export const AccountSchema = t.Object({
+export const PostAccountSchema = t.Object({
     company: t.String(),
     username: t.String(),
     password: t.String()
 })
 
-export type Account = {
-    company: string
-    username: string
-    password: string
-}
+export const DeleteSchema = t.Object({
+    id: t.Integer()
+})
+
+export const PutSchema = t.Object({
+    id: t.Integer(),
+    column: t.String(),
+    newValue: t.String()
+})
