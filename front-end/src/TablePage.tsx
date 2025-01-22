@@ -28,10 +28,6 @@ export default function TablePage() {
 
     useEffect(() => {
         const socket = new WebSocket("ws://localhost:3000/ws")
-        
-        socket.onopen = () => {
-            console.log("Connected")
-        }
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
