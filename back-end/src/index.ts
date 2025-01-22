@@ -3,10 +3,25 @@ import { cors } from '@elysiajs/cors';
 import { addJob, getJobs, deleteJob, updateJob } from "../prisma/job";
 import { getAccounts, addAccount, deleteAccount, updateAccount } from "../prisma/account";
 import { PostJobSchema, PostAccountSchema, DeleteSchema, PutSchema, JobModifiableCols, AccountModifiableCols } from "../types";
+import { ElysiaWS } from "elysia/dist/ws";
 
 const app = new Elysia()
-	.use(cors())
-	.post("/jobs", async ({body}) => {
+
+const clients = new Set<ElysiaWS>()
+app.ws("/ws", {
+    open(ws) {
+        console.log("Client connected")
+        clients.add(ws)
+    },
+    close(ws) {
+        console.log("Client disconnected")
+        clients.delete(ws)
+    }
+})
+
+app.use(cors())
+	
+app.post("/jobs", async ({body}) => {
 		console.log(body);
 		await addJob(body)
 	}, {
@@ -18,7 +33,8 @@ const app = new Elysia()
 	}, {
 		body: PostAccountSchema
 	})
-	.get("/jobs", async() => {
+
+app.get("/jobs", async() => {
 		const results = await getJobs()
 		results.sort((a, b) => a["id"] - b["id"])
 		return results
@@ -26,7 +42,8 @@ const app = new Elysia()
 	.get("/accounts", async () => {
 		return await getAccounts()
 	})
-	.delete("/jobs", async({body}) => {
+
+app.delete("/jobs", async({body}) => {
 		await deleteJob(body["id"])
 	}, {
 		body: DeleteSchema
@@ -36,7 +53,8 @@ const app = new Elysia()
 	}, {
 		body: DeleteSchema
 	})
-	.put("/jobs", async({body}) => {
+	
+app.put("/jobs", async({body}) => {
 		await updateJob(body["id"], body["column"] as JobModifiableCols, body["newValue"])
 	}, {
 		body: PutSchema
@@ -46,7 +64,8 @@ const app = new Elysia()
 	}, {
 		body: PutSchema
 	})
-	.listen(3000);
+
+app.listen(3000);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
