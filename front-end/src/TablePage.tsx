@@ -16,6 +16,7 @@ export default function TablePage() {
     const [searchTerm, setSearchTerm] = useState<Keys>(columns[type][0]);
     const [searchValue, setSearchValue] = useState<string>("");
 	const [pageIndex, setPageIndex] = useState<number>(0);    
+    const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
@@ -42,7 +43,6 @@ export default function TablePage() {
         }
     }, [])
 
-    const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
 
     const filtered = (searchValue === "" 
         ? data

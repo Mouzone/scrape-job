@@ -20,47 +20,83 @@ app.ws("/ws", {
 })
 
 app.use(cors())
-	
+
+app.get("/jobs", async() => {
+    const results = await getJobs()
+    results.sort((a, b) => a["id"] - b["id"])
+    return results
+})
+.get("/accounts", async () => {
+    return await getAccounts()
+})
+
 app.post("/jobs", async ({body}) => {
 		console.log(body);
-		await addJob(body)
+		const result = await addJob(body)
+        const message = JSON.stringify({type: "jobs", action: "post", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: PostJobSchema
 	})
 	.post("/accounts", async ({body}) => {
 		console.log(body)
-		await addAccount(body)
+		const result = await addAccount(body)
+        const message = JSON.stringify({type: "accounts", action: "post", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: PostAccountSchema
 	})
 
-app.get("/jobs", async() => {
-		const results = await getJobs()
-		results.sort((a, b) => a["id"] - b["id"])
-		return results
-	})
-	.get("/accounts", async () => {
-		return await getAccounts()
-	})
-
 app.delete("/jobs", async({body}) => {
-		await deleteJob(body["id"])
+		const result = await deleteJob(body["id"])
+        const message = JSON.stringify({type: "jobs", action: "delete", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: DeleteSchema
 	})
 	.delete("/accounts", async({body}) => {
-		await deleteAccount(body["id"])
+		const result = await deleteAccount(body["id"])
+        const message = JSON.stringify({type: "accounts", action: "delete", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: DeleteSchema
 	})
 	
 app.put("/jobs", async({body}) => {
-		await updateJob(body["id"], body["column"] as JobModifiableCols, body["newValue"])
+		const result = await updateJob(body["id"], body["column"] as JobModifiableCols, body["newValue"])
+        const message = JSON.stringify({type: "jobs", action: "update", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: PutSchema
 	})
 	.put("/accounts", async({body}) => {
-		await updateAccount(body["id"], body["column"] as AccountModifiableCols, body["newValue"])
+		const result = await updateAccount(body["id"], body["column"] as AccountModifiableCols, body["newValue"])
+        const message = JSON.stringify({type: "accounts", action: "update", payload: result})
+        clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message)
+            }
+        })
 	}, {
 		body: PutSchema
 	})
