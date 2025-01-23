@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import {Type, AccountKeys, JobKeys, searchableKeys, Data, Keys, } from "../types"
 
 const columns = {
@@ -32,6 +32,35 @@ export default function TablePage() {
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
+
+            switch(message.action) {
+                case "post":
+                    mutate(
+                        "http://localhost:3000/" + message.type,
+                        (prevData) => [...prevData, message.payload],
+                        false
+                    )
+                    break
+                case "put":
+                    mutate(
+                        "http://localhost:3000/" + message.type,
+                        (prevData) => 
+                            prevData.map(item => 
+                                item.id === message.payload.id 
+                                    ? message.payload 
+                                    : item
+                            ),
+                        false
+                    )
+                    break
+                case "delete":
+                    mutate(
+                        "http://localhost:3000/" + type,
+                        (prevData) => prevData.filter(item => item.id !== message.payload.id),
+                        false
+                    )
+                    break
+            }
         }
 
         socket.onclose = () => {

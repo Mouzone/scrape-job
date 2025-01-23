@@ -80,7 +80,7 @@ app.delete("/jobs", async({body}) => {
 	
 app.put("/jobs", async({body}) => {
 		const result = await updateJob(body["id"], body["column"] as JobModifiableCols, body["newValue"])
-        const message = JSON.stringify({type: "jobs", action: "update", payload: result})
+        const message = JSON.stringify({type: "jobs", action: "put", payload: result})
         clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(message)
@@ -91,7 +91,7 @@ app.put("/jobs", async({body}) => {
 	})
 	.put("/accounts", async({body}) => {
 		const result = await updateAccount(body["id"], body["column"] as AccountModifiableCols, body["newValue"])
-        const message = JSON.stringify({type: "accounts", action: "update", payload: result})
+        const message = JSON.stringify({type: "accounts", action: "put", payload: result})
         clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(message)
