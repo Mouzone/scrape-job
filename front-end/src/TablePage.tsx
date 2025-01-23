@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
-import useSWR, { mutate, useSWRConfig } from "swr";
+import useSWR, { mutate } from "swr";
 import {Type, AccountKeys, JobKeys, searchableKeys, Data, Keys, } from "../types"
 
 const columns = {
@@ -16,7 +16,6 @@ export default function TablePage() {
     const [searchTerm, setSearchTerm] = useState<Keys>(columns[type][0]);
     const [searchValue, setSearchValue] = useState<string>("");
 	const [pageIndex, setPageIndex] = useState<number>(0);    
-    const { cache } = useSWRConfig()
     const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
 
     useEffect(() => {
@@ -34,9 +33,6 @@ export default function TablePage() {
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)
             
-            if (!cache.get("http://localhost:3000/" + message.type)){
-                return
-            }
             switch(message.action) {
                 case "post":
                     mutate(
