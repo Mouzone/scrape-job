@@ -17,6 +17,7 @@ export default function TablePage() {
     const [searchValue, setSearchValue] = useState<string>("");
 	const [pageIndex, setPageIndex] = useState<number>(0);    
     const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
+    const [subscribed, setSubscribed] = useState<Type[]>([])
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
@@ -29,6 +30,13 @@ export default function TablePage() {
 
     useEffect(() => {
         const socket = new WebSocket("ws://localhost:3000/ws")
+
+        socket.onopen = () => {
+            if (!(type in subscribed)) {
+                socket.send(JSON.stringify({action: "subscribe", type}))
+                setSubscribed([...subscribed, type])
+            }
+        }
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data)

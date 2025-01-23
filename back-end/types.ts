@@ -1,5 +1,10 @@
 import { t } from 'elysia'
 
+export type SubMessage = {
+    action: "subscribe",
+    type: "jobs" | "accounts"
+}
+
 export const PostJobSchema = t.Object({
     jobsite: t.String(),
     company: t.String(),

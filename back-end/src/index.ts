@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { cors } from '@elysiajs/cors';
 import { addJob, getJobs, deleteJob, updateJob } from "../prisma/job";
 import { getAccounts, addAccount, deleteAccount, updateAccount } from "../prisma/account";
-import { PostJobSchema, PostAccountSchema, DeleteSchema, PutSchema, JobModifiableCols, AccountModifiableCols } from "../types";
+import { PostJobSchema, PostAccountSchema, DeleteSchema, PutSchema, JobModifiableCols, AccountModifiableCols, SubMessage } from "../types";
 import { ElysiaWS } from "elysia/dist/ws";
 
 const app = new Elysia()
@@ -13,10 +13,9 @@ app.ws("/ws", {
         console.log("Client connected")
         clients.add(ws)
     },
-    message(ws, message) {
+    message(ws, message: SubMessage) {
         console.log("here")
-        const data = JSON.parse(message)
-        console.log(data)
+        console.log(message)
     },
     close(ws) {
         console.log("Client disconnected")
