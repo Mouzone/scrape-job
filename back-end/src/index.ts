@@ -13,10 +13,15 @@ app.ws("/ws", {
         console.log("Client connected")
         clients.add(ws)
     },
+    message(ws, message) {
+        console.log("here")
+        const data = JSON.parse(message)
+        console.log(data)
+    },
     close(ws) {
         console.log("Client disconnected")
         clients.delete(ws)
-    }
+    },
 })
 
 app.use(cors())
