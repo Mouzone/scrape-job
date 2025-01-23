@@ -17,10 +17,13 @@ export default function TablePage() {
     const [searchValue, setSearchValue] = useState<string>("");
 	const [pageIndex, setPageIndex] = useState<number>(0);    
     const { data, error, isLoading }: { data: Data, error: boolean | undefined, isLoading: boolean} = useSWR("http://localhost:3000/" + type, fetcher);
+    const isSubscribed = useRef(false)
+    const socketRef = useRef<WebSocket | null>(null)
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
         setSearchValue("")
+        isSubscribed.current = true
     }, [type])
 
     useEffect(() => {
@@ -28,53 +31,62 @@ export default function TablePage() {
     }, [searchValue, type])
 
     useEffect(() => {
-        const socket = new WebSocket("ws://localhost:3000/ws")
+        if (!socketRef.current) {
+            socketRef.current = new WebSocket("ws://localhost:3000/ws")
 
-        socket.onmessage = (event) => {
-            const message = JSON.parse(event.data)
-            
-            switch(message.action) {
-                case "post":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) => [...prevData, message.payload],
-                        false
-                    )
-                    break
-                case "put":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) => 
-                            prevData.map(item => 
-                                item.id === message.payload.id 
-                                    ? message.payload 
-                                    : item
-                            ),
-                        false
-                    )
-                    break
-                case "delete":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) => prevData.filter(item => item.id !== message.payload.id),
-                        false
-                    )
-                    break
+            socketRef.current.onmessage = (event) => {
+                const message = JSON.parse(event.data)
+                
+                switch(message.action) {
+                    case "post":
+                        mutate(
+                            "http://localhost:3000/" + message.type,
+                            (prevData) => [...prevData, message.payload],
+                            false
+                        )
+                        break
+                    case "put":
+                        mutate(
+                            "http://localhost:3000/" + message.type,
+                            (prevData) => 
+                                prevData.map(item => 
+                                    item.id === message.payload.id 
+                                        ? message.payload 
+                                        : item
+                                ),
+                            false
+                        )
+                        break
+                    case "delete":
+                        mutate(
+                            "http://localhost:3000/" + message.type,
+                            (prevData) => prevData.filter(item => item.id !== message.payload.id),
+                            false
+                        )
+                        break
+                }
+            }
+
+            socketRef.current.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            socketRef.current.onclose = () => {
+                console.log("Websocket closed")
             }
         }
 
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        socket.onclose = () => {
-            console.log("Websocket closed")
+        if (socketRef.current.readyState === WebSocket.OPEN && !isSubscribed) {
+            socketRef.current.send(JSON.stringify({ action: 'subscribe' }));
         }
 
         return () => {
-            socket.close()
+            if (socketRef.current) {
+                socketRef.current.close()
+                socketRef.current = null
+            }
         }
-    }, [])
+    }, [isSubscribed])
 
 
     const filtered = (searchValue === "" 
