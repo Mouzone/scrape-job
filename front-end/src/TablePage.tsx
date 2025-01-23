@@ -31,6 +31,7 @@ export default function TablePage() {
     useEffect(() => {
         const socket = new WebSocket("ws://localhost:3000/ws")
 
+        // probably use a different useEffect
         socket.onopen = () => {
             if (!(type in subscribed)) {
                 socket.send(JSON.stringify({action: "subscribe", type}))
@@ -80,7 +81,9 @@ export default function TablePage() {
         }
 
         return () => {
-            socket.close()
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.close()
+            }
         }
     }, [])
 
