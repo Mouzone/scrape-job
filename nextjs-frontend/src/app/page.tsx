@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Forms from "../components/Inputs";
+import Forms from "../components/Form";
 import TablePage from "../components/TablePage";
 import TabButton from "../components/TabButton";
 
