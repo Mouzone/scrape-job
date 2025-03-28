@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fields } from "@/utility/consts";
-import Input from "./input";
+import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 
 export default function Inputs({ type }: { type: Type }) {

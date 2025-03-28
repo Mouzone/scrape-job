@@ -1,3 +1,5 @@
+import { columns } from "@/utility/consts";
+
 export default function Search({
     type,
     searchTerm,

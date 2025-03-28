@@ -1,3 +1,7 @@
+import { columns } from "@/utility/consts";
+import ModifiableCell from "./ModifiableCell";
+import DeleteButton from "./DeleteButton";
+
 export default function TableBody({
     type,
     data,
@@ -18,7 +22,7 @@ export default function TableBody({
                         index % 2 ? "bg-gray-200" : "bg-white"
                     } hover:bg-blue-100 transition-colors`}
                 >
-                    <td className="p-4 border-b text-gray-500 text-center">
+                    <td className="p-4 text-gray-500 text-center">
                         {pageIndex + index + 1}
                     </td>
                     {columns[type].map((column) => (

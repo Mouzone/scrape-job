@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
+import Search from "./Search";
 import useSWR, { mutate } from "swr";
 import {
     Type,
@@ -10,11 +11,7 @@ import {
     Data,
     Keys,
 } from "../types";
-
-const columns = {
-    accounts: ["company", "username", "password"] as AccountKeys[],
-    jobs: ["applied", "jobsite", "company", "title"] as JobKeys[],
-};
+import { columns } from "@/utility/consts";
 
 const fetcher = (...args: [string]) => fetch(...args).then((res) => res.json());
 

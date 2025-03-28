@@ -1,3 +1,5 @@
+import { columns } from "@/utility/consts";
+
 export default function TableHead({
     type,
     setIncreasing,
@@ -10,13 +12,13 @@ export default function TableHead({
     return (
         <thead>
             <tr className="bg-gray-200">
-                <th className="p-4 w-24 min-w-24 text-gray-600 font-medium border-b">
+                <th className="p-4 w-24 min-w-24 text-gray-600 font-medium">
                     #
                 </th>
                 {columns[type].map((header) => (
                     <th
                         key={header}
-                        className={`p-4 border-b w-48 min-w-48 ${
+                        className={`p-4 w-48 min-w-48 ${
                             header === "applied" ? "cursor-pointer" : ""
                         }`}
                         onClick={() => {
@@ -51,7 +53,7 @@ export default function TableHead({
                         </div>
                     </th>
                 ))}
-                <th className="p-4 text-gray-600 font-medium border-b text-center">
+                <th className="p-4 text-gray-600 font-medium text-center">
                     {" "}
                     Delete{" "}
                 </th>

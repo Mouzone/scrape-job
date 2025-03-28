@@ -10,3 +10,8 @@ export const fields = {
         password: "",
     },
 };
+
+export const columns = {
+    accounts: ["company", "username", "password"] as AccountKeys[],
+    jobs: ["applied", "jobsite", "company", "title"] as JobKeys[],
+};

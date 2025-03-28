@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function ModifiableCell({
     type,
     id,
@@ -38,7 +40,7 @@ export default function ModifiableCell({
     };
 
     return (
-        <td className="p-4 border-b">
+        <td className="p-4">
             {edit && column !== "applied" ? (
                 <input
                     value={newValue}

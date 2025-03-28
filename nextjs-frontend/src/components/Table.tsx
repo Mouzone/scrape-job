@@ -1,6 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import DeleteConfirmation from "./table components/DeleteConfirmation";
+import TableHead from "./table components/TableHead";
+import TableBody from "./table components/TableBody";
+import PageNav from "./table components/PageNav";
 import {
     Type,
     Account,
