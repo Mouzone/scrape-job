@@ -11,7 +11,7 @@ export default function TableBody({
     type: Type;
     data: Account[] | Job[];
     pageIndex: number;
-    setToDelete: React.Dispatch<React.SetStateAction<number | null>>;
+    setToDelete: React.Dispatch<React.SetStateAction<string>>;
 }) {
     return (
         <tbody>

@@ -2,8 +2,8 @@ export default function DeleteButton({
     setToDelete,
     id,
 }: {
-    setToDelete: React.Dispatch<React.SetStateAction<number | null>>;
-    id: number;
+    setToDelete: React.Dispatch<React.SetStateAction<string>>;
+    id: string;
 }) {
     return (
         <td className="h-full">
