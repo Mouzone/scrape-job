@@ -1,4 +1,5 @@
 import { columns } from "@/utility/consts";
+import { AccountKeys, FormType, JobKeys } from "@/utility/types";
 
 export default function Search({
     type,
@@ -7,9 +8,9 @@ export default function Search({
     searchValue,
     setSearchValue,
 }: {
-    type: Type;
+    type: FormType;
     searchTerm: string;
-    setSearchTerm: React.Dispatch<React.SetStateAction<Keys>>;
+    setSearchTerm: React.Dispatch<React.SetStateAction<JobKeys | AccountKeys>>;
     searchValue: string;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }) {
@@ -18,7 +19,9 @@ export default function Search({
             <select
                 value={searchTerm}
                 name="search term"
-                onChange={(e) => setSearchTerm(e.target.value as Keys)}
+                onChange={(e) =>
+                    setSearchTerm(e.target.value as JobKeys | AccountKeys)
+                }
                 className=" px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
                 {columns[type].map((column) => (

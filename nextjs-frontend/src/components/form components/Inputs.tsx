@@ -18,8 +18,14 @@ export default function Inputs({ type }: { type: FormType }) {
         if (!Object.values(form).every((value) => value !== "")) {
             return;
         }
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, "0"); // Ensures 2 digits (e.g., 02)
+        const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const year = String(today.getFullYear()).slice(-2); // Last 2 digits of year
+
+        const formattedDate = `${month}/${day}/${year}`;
         await addDoc(collection(firestore, type), {
-            applied: new Date(),
+            applied: formattedDate,
             ...form,
         });
         setForm(fields[type]);

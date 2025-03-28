@@ -14,12 +14,9 @@ export default function ModifiableCell({
     column: string;
     value: string;
 }) {
+    console.log("rerendering");
     const [edit, setEdit] = useState(false);
     const [newValue, setNewValue] = useState(value);
-
-    if (column === "applied") {
-        value = "5";
-    }
 
     const sendEdit = async () => {
         setEdit(false);
@@ -45,7 +42,7 @@ export default function ModifiableCell({
                         column !== "applied" ? () => setEdit(true) : undefined
                     }
                 >
-                    {value}
+                    {newValue}
                 </span>
             )}
         </td>

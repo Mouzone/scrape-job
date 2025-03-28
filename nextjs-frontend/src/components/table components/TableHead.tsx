@@ -1,11 +1,12 @@
 import { columns } from "@/utility/consts";
+import { FormType } from "@/utility/types";
 
 export default function TableHead({
     type,
     setIncreasing,
     increasing,
 }: {
-    type: Type;
+    type: FormType;
     setIncreasing: React.Dispatch<React.SetStateAction<boolean>>;
     increasing: boolean;
 }) {
