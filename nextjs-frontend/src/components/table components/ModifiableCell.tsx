@@ -1,3 +1,6 @@
+import { firestore } from "@/utility/firebase";
+import { FormType } from "@/utility/types";
+import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function ModifiableCell({
@@ -6,10 +9,10 @@ export default function ModifiableCell({
     column,
     value,
 }: {
-    type: Type;
-    id: number;
+    type: FormType;
+    id: string;
     column: string;
-    value: string | number;
+    value: string;
 }) {
     const [edit, setEdit] = useState(false);
     const [newValue, setNewValue] = useState(value);
@@ -24,19 +27,9 @@ export default function ModifiableCell({
         value = formattedDate;
     }
 
-    const sendEdit = () => {
+    const sendEdit = async () => {
         setEdit(false);
-        fetch("http://localhost:3000/" + type, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id,
-                column,
-                newValue,
-            }),
-        });
+        await updateDoc(doc(firestore, type, id), { [column]: newValue });
     };
 
     return (

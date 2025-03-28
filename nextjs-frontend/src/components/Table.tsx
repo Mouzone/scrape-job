@@ -4,9 +4,9 @@ import DeleteConfirmation from "./table components/DeleteConfirmation";
 import TableHead from "./table components/TableHead";
 import TableBody from "./table components/TableBody";
 import PageNav from "./table components/PageNav";
-import { Type, Account, Job, Data } from "../types";
 import { deleteDoc, doc } from "firebase/firestore";
 import { firestore } from "@/utility/firebase";
+import { Account, FormType, Job } from "@/utility/types";
 
 export default function Table({
     type,
@@ -14,7 +14,7 @@ export default function Table({
     setPageIndex,
     data,
 }: {
-    type: Type;
+    type: FormType;
     pageIndex: number;
     setPageIndex: React.Dispatch<React.SetStateAction<number>>;
     data: Account[] | Job[];
@@ -27,10 +27,11 @@ export default function Table({
         await deleteDoc(doc(firestore, type, toDelete));
     };
 
-    const sortedData = (
-        type === "jobs" && !increasing ? [...data].reverse() : data
-    ) as Data;
-    const paginated = sortedData.slice(pageIndex, pageIndex + 50) as Data;
+    const sortedData =
+        type === "jobs" && !increasing
+            ? ([...data].reverse() as Job[])
+            : (data as Account[]);
+    const paginated = sortedData.slice(pageIndex, pageIndex + 50);
     return (
         <>
             <DeleteConfirmation

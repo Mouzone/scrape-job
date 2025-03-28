@@ -1,6 +1,7 @@
 import { columns } from "@/utility/consts";
 import ModifiableCell from "./ModifiableCell";
 import DeleteButton from "./DeleteButton";
+import { Account, AccountKeys, FormType, Job, JobKeys } from "@/utility/types";
 
 export default function TableBody({
     type,
@@ -8,7 +9,7 @@ export default function TableBody({
     pageIndex,
     setToDelete,
 }: {
-    type: Type;
+    type: FormType;
     data: Account[] | Job[];
     pageIndex: number;
     setToDelete: React.Dispatch<React.SetStateAction<string>>;
@@ -27,13 +28,11 @@ export default function TableBody({
                     </td>
                     {columns[type].map((column) => (
                         <ModifiableCell
-                            key={entry["id"] + column}
+                            key={column}
                             type={type}
                             id={entry["id"]}
                             column={column}
-                            value={
-                                entry[column as searchableKeys<typeof entry>]
-                            }
+                            value={entry[column]}
                         />
                     ))}
                     <DeleteButton setToDelete={setToDelete} id={entry["id"]} />

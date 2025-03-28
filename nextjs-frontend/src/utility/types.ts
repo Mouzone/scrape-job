@@ -1,19 +1,25 @@
 import { fields } from "./consts";
 
-interface fields {
-    jobs: {
-        jobsite: string;
-        company: string;
-        title: string;
-    };
-    accounts: {
-        company: string;
-        username: string;
-        password: string;
-    };
+export type Job = {
+    id: string;
+    jobsite: string;
+    company: string;
+    title: string;
+};
+
+export type Account = {
+    id: string;
+    company: string;
+    username: string;
+    password: string;
+};
+export interface Fields {
+    jobs: Job;
+    accounts: Account;
 }
-export type FormType = keyof fields;
 
-export type JobKeys = keyof fields["jobs"];
+export type FormType = keyof Fields;
 
-export type AccountKeys = keyof fields["accounts"];
+export type JobKeys = keyof Job;
+
+export type AccountKeys = keyof Account;
