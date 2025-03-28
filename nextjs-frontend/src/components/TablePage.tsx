@@ -3,9 +3,9 @@ import Table from "./Table";
 import TabButton from "./TabButton";
 import Search from "./Search";
 import { columns } from "@/utility/consts";
-import { collection, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/utility/firebase";
-import { Account, AccountKeys, FormType, Job, JobKeys } from "@/utility/types";
+import { Account, FormType, Job } from "@/utility/types";
 
 export default function TablePage() {
     const [type, setType] = useState<FormType>("jobs");
