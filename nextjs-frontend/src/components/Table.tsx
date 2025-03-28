@@ -4,59 +4,28 @@ import DeleteConfirmation from "./table components/DeleteConfirmation";
 import TableHead from "./table components/TableHead";
 import TableBody from "./table components/TableBody";
 import PageNav from "./table components/PageNav";
-import {
-    Type,
-    Account,
-    AccountKeys,
-    Job,
-    JobKeys,
-    searchableKeys,
-    Data,
-} from "../types";
-
-const columns = {
-    accounts: ["company", "username", "password"] as AccountKeys[],
-    jobs: ["applied", "jobsite", "company", "title"] as JobKeys[],
-};
+import { Type, Account, Job, Data } from "../types";
+import { deleteDoc, doc } from "firebase/firestore";
+import { firestore } from "@/utility/firebase";
 
 export default function Table({
     type,
     pageIndex,
     setPageIndex,
-    error,
-    isLoading,
     data,
 }: {
     type: Type;
     pageIndex: number;
     setPageIndex: React.Dispatch<React.SetStateAction<number>>;
-    error: boolean | undefined;
-    isLoading: boolean;
     data: Account[] | Job[];
 }) {
-    const [toDelete, setToDelete] = useState<number | null>(null);
+    const [toDelete, setToDelete] = useState<string>("");
     const [increasing, setIncreasing] = useState<boolean>(true);
 
-    const deleteEntry = () => {
-        fetch("http://localhost:3000/" + type, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id: toDelete,
-            }),
-        });
-        setToDelete(null);
+    const deleteEntry = async () => {
+        setToDelete("");
+        await deleteDoc(doc(firestore, type, toDelete));
     };
-
-    if (error)
-        return (
-            <div className="text-center py-8 text-red-600">Failed to load</div>
-        );
-
-    if (isLoading)
-        return <div className="text-center py-8 text-gray-600">Loading...</div>;
 
     const sortedData = (
         type === "jobs" && !increasing ? [...data].reverse() : data

@@ -1,3 +1,5 @@
+import { AccountKeys, JobKeys } from "./types";
+
 export const fields = {
     jobs: {
         jobsite: "",
@@ -12,6 +14,6 @@ export const fields = {
 };
 
 export const columns = {
-    accounts: ["company", "username", "password"] as AccountKeys[],
     jobs: ["applied", "jobsite", "company", "title"] as JobKeys[],
+    accounts: ["company", "username", "password"] as AccountKeys[],
 };

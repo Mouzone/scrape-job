@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { fields } from "@/utility/consts";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
+import { addDoc, collection } from "firebase/firestore";
+import { firestore } from "@/utility/firebase";
+import { FormType } from "@/utility/types";
 
-export default function Inputs({ type }: { type: Type }) {
+export default function Inputs({ type }: { type: FormType }) {
     const [form, setForm] = useState(fields[type]);
 
     useEffect(() => {
@@ -15,13 +18,7 @@ export default function Inputs({ type }: { type: Type }) {
         if (!Object.values(form).every((value) => value !== "")) {
             return;
         }
-        await fetch("http://localhost:3000/" + type, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(form),
-        });
+        await addDoc(collection(firestore, type), form);
         setForm(fields[type]);
     };
 

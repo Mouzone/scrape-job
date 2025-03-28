@@ -2,33 +2,32 @@ import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
 import Search from "./Search";
-import useSWR, { mutate } from "swr";
-import {
-    Type,
-    AccountKeys,
-    JobKeys,
-    searchableKeys,
-    Data,
-    Keys,
-} from "../types";
+import { Type, searchableKeys, Data, Keys } from "../types";
 import { columns } from "@/utility/consts";
-
-const fetcher = (...args: [string]) => fetch(...args).then((res) => res.json());
+import { collection, doc, getDocs } from "firebase/firestore";
+import { firestore } from "@/utility/firebase";
 
 export default function TablePage() {
     const [type, setType] = useState<Type>("jobs");
     const [searchTerm, setSearchTerm] = useState<Keys>(columns[type][0]);
     const [searchValue, setSearchValue] = useState<string>("");
     const [pageIndex, setPageIndex] = useState<number>(0);
-    const {
-        data,
-        error,
-        isLoading,
-    }: { data: Data; error: boolean | undefined; isLoading: boolean } = useSWR(
-        "http://localhost:3000/" + type,
-        fetcher
-    );
-    const [subscribed, setSubscribed] = useState<Type[]>([]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const documents = await getDocs(collection(firestore, type));
+            const results = [];
+            documents.forEach((document) => {
+                results.push({
+                    id: document.id,
+                    ...document.data(),
+                });
+            });
+            setData(results);
+        }
+        fetchData();
+    });
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
@@ -38,68 +37,6 @@ export default function TablePage() {
     useEffect(() => {
         setPageIndex(0);
     }, [searchValue, type]);
-
-    useEffect(() => {
-        const socket = new WebSocket("ws://localhost:3000/ws");
-
-        // probably use a different useEffect
-        socket.onopen = () => {
-            if (!(type in subscribed)) {
-                socket.send(JSON.stringify({ action: "subscribe", type }));
-                setSubscribed([...subscribed, type]);
-            }
-        };
-
-        socket.onmessage = (event) => {
-            const message = JSON.parse(event.data);
-
-            switch (message.action) {
-                case "post":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) => [...prevData, message.payload],
-                        false
-                    );
-                    break;
-                case "put":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) =>
-                            prevData.map((item) =>
-                                item.id === message.payload.id
-                                    ? message.payload
-                                    : item
-                            ),
-                        false
-                    );
-                    break;
-                case "delete":
-                    mutate(
-                        "http://localhost:3000/" + message.type,
-                        (prevData) =>
-                            prevData.filter(
-                                (item) => item.id !== message.payload.id
-                            ),
-                        false
-                    );
-                    break;
-            }
-        };
-
-        socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
-        };
-
-        socket.onclose = () => {
-            console.log("Websocket closed");
-        };
-
-        return () => {
-            if (socket.readyState === WebSocket.OPEN) {
-                socket.close();
-            }
-        };
-    }, []);
 
     const filtered = (
         searchValue === ""
@@ -138,8 +75,6 @@ export default function TablePage() {
                 type={type}
                 pageIndex={pageIndex}
                 setPageIndex={setPageIndex}
-                error={error}
-                isLoading={isLoading}
                 data={filtered}
             />
         </>
