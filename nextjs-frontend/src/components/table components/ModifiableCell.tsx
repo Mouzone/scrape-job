@@ -1,6 +1,6 @@
 import { firestore } from "@/utility/firebase";
 import { FormType } from "@/utility/types";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function ModifiableCell({
@@ -18,13 +18,7 @@ export default function ModifiableCell({
     const [newValue, setNewValue] = useState(value);
 
     if (column === "applied") {
-        const date = new Date(value);
-        const formattedDate = date.toLocaleDateString("en-US", {
-            year: "2-digit",
-            month: "2-digit",
-            day: "2-digit",
-        });
-        value = formattedDate;
+        value = "5";
     }
 
     const sendEdit = async () => {

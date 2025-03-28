@@ -18,7 +18,10 @@ export default function Inputs({ type }: { type: FormType }) {
         if (!Object.values(form).every((value) => value !== "")) {
             return;
         }
-        await addDoc(collection(firestore, type), form);
+        await addDoc(collection(firestore, type), {
+            applied: new Date(),
+            ...form,
+        });
         setForm(fields[type]);
     };
 

@@ -2,32 +2,32 @@ import React, { useState, useEffect } from "react";
 import Table from "./Table";
 import TabButton from "./TabButton";
 import Search from "./Search";
-import { Type, searchableKeys, Data, Keys } from "../types";
 import { columns } from "@/utility/consts";
 import { collection, doc, getDocs } from "firebase/firestore";
 import { firestore } from "@/utility/firebase";
+import { Account, AccountKeys, FormType, Job, JobKeys } from "@/utility/types";
 
 export default function TablePage() {
-    const [type, setType] = useState<Type>("jobs");
-    const [searchTerm, setSearchTerm] = useState<Keys>(columns[type][0]);
+    const [type, setType] = useState<FormType>("jobs");
+    const [searchTerm, setSearchTerm] = useState(columns[type][0]);
     const [searchValue, setSearchValue] = useState<string>("");
     const [pageIndex, setPageIndex] = useState<number>(0);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Account[] | Job[]>([]);
 
     useEffect(() => {
         async function fetchData() {
             const documents = await getDocs(collection(firestore, type));
-            const results = [];
+            const results: Account[] | Job[] = [];
             documents.forEach((document) => {
                 results.push({
                     id: document.id,
                     ...document.data(),
-                });
+                } as Account | Job);
             });
             setData(results);
         }
         fetchData();
-    });
+    }, [type]);
 
     useEffect(() => {
         setSearchTerm(columns[type][0]);
@@ -38,15 +38,12 @@ export default function TablePage() {
         setPageIndex(0);
     }, [searchValue, type]);
 
-    const filtered = (
+    const filtered =
         searchValue === ""
             ? data
             : data.filter((entry) =>
-                  entry[searchTerm as searchableKeys<typeof entry>]
-                      .toLowerCase()
-                      .includes(searchValue)
-              )
-    ) as Data;
+                  entry[searchTerm].toLowerCase().includes(searchValue)
+              );
 
     return (
         <>

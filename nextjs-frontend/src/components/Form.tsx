@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Type } from "../types";
 import Inputs from "./form components/Inputs";
+import { FormType } from "@/utility/types";
 
 function Forms() {
-    const [selectedForm, setSelectedForm] = useState<Type>("jobs");
+    const [selectedForm, setSelectedForm] = useState<FormType>("jobs");
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -13,7 +13,9 @@ function Forms() {
                 </label>
                 <select
                     value={selectedForm}
-                    onChange={(e) => setSelectedForm(e.target.value as Type)}
+                    onChange={(e) =>
+                        setSelectedForm(e.target.value as FormType)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                     <option value="jobs"> Job </option>
